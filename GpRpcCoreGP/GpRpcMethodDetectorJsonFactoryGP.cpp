@@ -1,7 +1,7 @@
 #include "GpRpcMethodDetectorJsonFactoryGP.hpp"
 #include "GpRpcMethodDetectorJsonGP.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 GpRpcMethodDetectorJsonFactoryGP::GpRpcMethodDetectorJsonFactoryGP (void) noexcept
 {
@@ -11,9 +11,9 @@ GpRpcMethodDetectorJsonFactoryGP::~GpRpcMethodDetectorJsonFactoryGP (void) noexc
 {
 }
 
-GpRpcMethodDetector::SP GpRpcMethodDetectorJsonFactoryGP::NewInstance (GpSpanPtrByteR aData) const
+GpRpcMethodDetector::SP GpRpcMethodDetectorJsonFactoryGP::NewInstance (GpSpanPtrCharRW aData) const
 {
-    return MakeSP<GpRpcMethodDetectorJsonGP>(aData.AsStringView());
+    return MakeSP<GpRpcMethodDetectorJsonGP>(std::move(aData));
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

@@ -1,10 +1,14 @@
 #pragma once
 
 #include "../GpRpcHttp_global.hpp"
+#include "../../../GpNetwork/GpNetworkHttp/GpNetworkHttpCore/RqRs/GpHttpRequestHandler.hpp"
+#include "../../GpRpcCore/Server/GpRpcMethodsManagersGroup.hpp"
+#include "../../GpRpcCore/Server/GpRpcMethodDetectorFactory.hpp"
+#include "../../../GpCore2/GpReflection/Serializers/GpReflectSerializerFactory.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
-class GpRpcSrvRequestHandlerHttp: public GpHttpRequestHandler
+class GP_RPC_HTTP_API GpRpcSrvRequestHandlerHttp: public GpHttpRequestHandler
 {
 public:
     CLASS_REMOVE_CTRS_MOVE_COPY(GpRpcSrvRequestHandlerHttp)
@@ -16,7 +20,7 @@ public:
                                                                  GpRpcMethodDetectorFactory::SP aMethodDetectorFactory) noexcept;
     virtual                         ~GpRpcSrvRequestHandlerHttp (void) noexcept override;
 
-    virtual GpHttpResponse::SP      OnRequest                   (const GpHttpRequest& aRequest) override final;
+    virtual GpHttpResponse::SP      OnRequest                   (GpHttpRequest& aRequest) override final;
 
 private:
     GpRpcMethodsManagersGroup::SP   iRpcManagersGroup;
@@ -36,4 +40,4 @@ iMethodDetectorFactory(std::move(aMethodDetectorFactory))
 {
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

@@ -2,7 +2,7 @@
 
 #include "GpRpcCliTransportFactory.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GpRpcClient
 {
@@ -30,4 +30,4 @@ iTransport(std::move(aTransport))
 {
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

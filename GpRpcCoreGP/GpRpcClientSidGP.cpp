@@ -1,18 +1,18 @@
 #include "GpRpcClientSidGP.hpp"
 #include "RqRs/GpRpcRqRsGP.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 GpRpcClientSidGP::~GpRpcClientSidGP (void) noexcept
 {
 }
 
-void    GpRpcClientSidGP::OnBeforeRQ (GPlatform::RPC::GpRpcRqIfDesc& aRq)
+void    GpRpcClientSidGP::OnBeforeRQ (GPlatform::GpRpcRqIfDesc& aRq)
 {
     GpRpcClientGP::OnBeforeRQ(aRq);
 
-    GPlatform::RPC::GpRpcRqGPDesc& rq = static_cast<GPlatform::RPC::GpRpcRqGPDesc&>(aRq);
+    GPlatform::GpRpcRqGPDesc& rq = static_cast<GPlatform::GpRpcRqGPDesc&>(aRq);
     rq.sid  = iSid;
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

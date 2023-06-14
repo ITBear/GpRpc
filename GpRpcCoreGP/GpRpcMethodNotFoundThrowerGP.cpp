@@ -1,15 +1,15 @@
 #include "GpRpcMethodNotFoundThrowerGP.hpp"
 #include "GpRpcMethodNotFoundExceptionGP.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
-void    GpRpcMethodNotFoundThrowerGP::Throw (std::string_view aMethodName) const
+void    GpRpcMethodNotFoundThrowerGP::Throw (std::u8string_view aMethodName) const
 {
-    throw GpRpcMethodNotFoundExceptionGP
+    THROW_METHOD_NOT_FOUND_GP
     (
         GpRpcMethodNotFoundExceptionCodeGP::METHOD_NOT_FOUND,
         aMethodName
     );
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

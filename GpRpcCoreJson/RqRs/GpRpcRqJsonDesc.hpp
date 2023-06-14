@@ -1,14 +1,17 @@
 #pragma once
 
 #include "../GpRpcCoreJson_global.hpp"
+#include "../../GpCore2/GpReflection/GpReflectUtils.hpp"
+#include "../../GpRpcCore/RqRs/GpRpcRqIfDesc.hpp"
+#include "../../../GpCore2/GpUtils/TypeTraits/GpTypeInfoUtils.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GP_RPC_CORE_JSON_API GpRpcRqJsonDesc: public GpRpcRqIfDesc
 {
 public:
     CLASS_DD(GpRpcRqJsonDesc)
-    REFLECT_DECLARE("b127a692-821c-4019-91c8-416ee7e2963a"_uuid)
+    REFLECT_DECLARE(u8"b127a692-821c-4019-91c8-416ee7e2963a"_uuid)
 
 public:
     inline                      GpRpcRqJsonDesc     (void) noexcept;
@@ -16,13 +19,13 @@ public:
     inline explicit             GpRpcRqJsonDesc     (GpRpcRqJsonDesc&& aDesc) noexcept;
     virtual                     ~GpRpcRqJsonDesc    (void) noexcept override;
 
-    virtual std::string_view    Method              (void) const override final;
-    virtual void                SetMethod           (std::string_view aMethod) override final;
+    virtual std::u8string_view  Method              (void) const override final;
+    virtual void                SetMethod           (std::u8string_view aMethod) override final;
 
 public:
-    std::string                 jsonrpc = std::string("2.0"_sv);
+    std::u8string               jsonrpc = u8"2.0";
     s_int_64                    id      = 1;
-    std::string                 method;
+    std::u8string               method;
 };
 
 GpRpcRqJsonDesc::GpRpcRqJsonDesc (void) noexcept
@@ -65,9 +68,9 @@ public: \
                         NAME##_rq   (DataT&& aData) noexcept; \
     virtual             ~NAME##_rq  (void) noexcept; \
  \
-    virtual std::any    Payload     (void) const override final; \
-    virtual std::any    Payload     (void) override final; \
-    virtual void        SetPayload  (std::any aAny) override final; \
+    virtual GpAny       Payload     (void) const override final; \
+    virtual GpAny       Payload     (void) override final; \
+    virtual void        SetPayload  (GpAny& aAny) override final; \
  \
 public: \
     DataT               params; \
@@ -101,29 +104,29 @@ NAME##_rq::~NAME##_rq (void) noexcept \
 { \
 } \
  \
-std::any    NAME##_rq::Payload (void) const \
+GpAny   NAME##_rq::Payload (void) const \
 { \
-   return std::make_any<DataTRefC>(params); \
+   return GpAny{DataTRefC(params)}; \
 } \
  \
-std::any    NAME##_rq::Payload (void) \
+GpAny   NAME##_rq::Payload (void) \
 { \
-   return std::make_any<DataTRef>(params); \
+   return GpAny{DataTRef(params)}; \
 } \
  \
-void    NAME##_rq::SetPayload (std::any aAny) \
+void    NAME##_rq::SetPayload (GpAny& aAny) \
 { \
-   const auto& typeInfoAny = aAny.type(); \
+   const auto& typeInfoAny = aAny.TypeInfo(); \
 \
-   if (typeInfoAny == typeid(DataTRef)) \
+   if (GpTypeInfoUtils::SIsSame(typeInfoAny, typeid(DataTRef))) \
    { \
-       params = std::any_cast<DataTRef>(aAny); \
-   } else if (typeInfoAny == typeid(DataTRefC)) \
+       params = aAny.ValueNoCheck<DataTRef>(); \
+   } else if (GpTypeInfoUtils::SIsSame(typeInfoAny, typeid(DataTRefC))) \
    { \
-       params = std::any_cast<DataTRefC>(aAny); \
+       params = aAny.ValueNoCheck<DataTRefC>(); \
    } else \
    { \
-       throw std::bad_any_cast(); \
+       THROW_GP(u8"Unsupported payload type"_sv); \
    } \
 } \
  \
@@ -132,4 +135,4 @@ void    NAME##_rq::_SReflectCollectProps (GpReflectProp::C::Vec::Val& aPropsOut)
     PROP_F(params, (GpReflectPropFlags{GpReflectPropFlags::value_type{GpReflectPropFlag::AS_TUPLE, ""_sv}})); \
 }
 
-}//namespace GPlatform::API::RPC
+}//namespace GPlatform

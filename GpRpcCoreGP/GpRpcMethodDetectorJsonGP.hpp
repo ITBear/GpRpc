@@ -1,8 +1,9 @@
 #pragma once
 
 #include "GpRpcCoreGP_global.hpp"
+#include "../GpRpcCore/Server/GpRpcMethodDetector.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GpRpcMethodDetectorJsonGP final: public GpRpcMethodDetector
 {
@@ -11,13 +12,18 @@ public:
     CLASS_DD(GpRpcMethodDetectorJsonGP)
 
 public:
-                                GpRpcMethodDetectorJsonGP   (std::string_view aJsonStr) noexcept;
-    virtual                     ~GpRpcMethodDetectorJsonGP  (void) noexcept override final;
+    inline              GpRpcMethodDetectorJsonGP   (GpSpanPtrCharRW aJsonStr) noexcept;
+    virtual             ~GpRpcMethodDetectorJsonGP  (void) noexcept override final;
 
-    virtual std::string         DetectApiMethodName         (void) const override final;
+    virtual ResT        DetectApiMethodName         (void) const override final;
 
 private:
-    std::string_view            iJsonStr;
+    GpSpanPtrCharRW     iJsonStr;
 };
 
-}//namespace GPlatform::RPC
+GpRpcMethodDetectorJsonGP::GpRpcMethodDetectorJsonGP (GpSpanPtrCharRW aJsonStr) noexcept:
+iJsonStr(std::move(aJsonStr))
+{
+}
+
+}//namespace GPlatform

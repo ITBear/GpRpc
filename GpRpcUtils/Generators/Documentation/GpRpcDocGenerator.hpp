@@ -1,0 +1,7 @@
+
+
+class GpRpcDocGenerator
+{
+public:
+    GpRpcDocGenerator();
+};

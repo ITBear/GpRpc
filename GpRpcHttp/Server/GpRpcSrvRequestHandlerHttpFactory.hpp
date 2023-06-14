@@ -1,8 +1,12 @@
 #pragma once
 
 #include "../GpRpcHttp_global.hpp"
+#include "../../../GpNetwork/GpNetworkHttp/GpNetworkHttpCore/RqRs/GpHttpRequestHandlerFactory.hpp"
+#include "../../../GpCore2/GpReflection/Serializers/GpReflectSerializerFactory.hpp"
+#include "../../GpRpcCore/Server/GpRpcMethodsManagersGroup.hpp"
+#include "../../GpRpcCore/Server/GpRpcMethodDetectorFactory.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GP_RPC_HTTP_API GpRpcSrvRequestHandlerHttpFactory final: public GpHttpRequestHandlerFactory
 {
@@ -30,10 +34,10 @@ GpRpcSrvRequestHandlerHttpFactory::GpRpcSrvRequestHandlerHttpFactory
     GpReflectSerializerFactory::SP  aSerializerFactory,
     GpRpcMethodDetectorFactory::SP  aMethodDetectorFactory
 ) noexcept:
-iRpcManagersGroup(std::move(aRpcManagersGroup)),
-iSerializerFactory(std::move(aSerializerFactory)),
+iRpcManagersGroup     (std::move(aRpcManagersGroup)),
+iSerializerFactory    (std::move(aSerializerFactory)),
 iMethodDetectorFactory(std::move(aMethodDetectorFactory))
 {
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

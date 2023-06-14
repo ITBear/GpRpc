@@ -2,7 +2,7 @@
 
 #include "../RqRs/GpRpcRqRs.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GpRpcMethod
 {
@@ -17,7 +17,7 @@ public:
     virtual GpRpcRsIfDesc::SP               Process         (GpRpcRqIfDesc& aRq) = 0;
     virtual const GpReflectModel&           RqReflectModel  (void) const noexcept = 0;
     virtual const GpReflectModel&           RsReflectModel  (void) const noexcept = 0;
-    virtual std::string_view                MethodName      (void) const noexcept = 0;
+    virtual std::u8string_view              MethodName      (void) const noexcept = 0;
 };
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

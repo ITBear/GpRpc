@@ -1,29 +1,31 @@
 #pragma once
 
 #include "GpRpcRsResultJsonDesc.hpp"
+#include "../../GpRpcCore/RqRs/GpRpcRsIfDesc.hpp"
+#include "../../../GpCore2/GpUtils/TypeTraits/GpTypeInfoUtils.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GP_RPC_CORE_JSON_API GpRpcRsJsonDesc: public GpRpcRsIfDesc
 {
 public:
     CLASS_DD(GpRpcRsJsonDesc)
-    REFLECT_DECLARE("2b335342-83fd-48f5-8427-6787f794d156"_uuid)
+    REFLECT_DECLARE(u8"2b335342-83fd-48f5-8427-6787f794d156"_uuid)
 
 public:
-    inline                              GpRpcRsJsonDesc     (void) noexcept;
-    inline explicit                     GpRpcRsJsonDesc     (const GpRpcRsJsonDesc& aDesc);
-    inline explicit                     GpRpcRsJsonDesc     (GpRpcRsJsonDesc&& aDesc) noexcept;
-    virtual                             ~GpRpcRsJsonDesc    (void) noexcept override;
+    inline                          GpRpcRsJsonDesc     (void) noexcept;
+    inline explicit                 GpRpcRsJsonDesc     (const GpRpcRsJsonDesc& aDesc);
+    inline explicit                 GpRpcRsJsonDesc     (GpRpcRsJsonDesc&& aDesc) noexcept;
+    virtual                         ~GpRpcRsJsonDesc    (void) noexcept override;
 
-    virtual GpRpcRsResultIfDesc::CSP    Result              (void) const override final;
-    virtual GpRpcRsResultIfDesc::SP     Result              (void) override final;
-    virtual void                        SetResult           (GpRpcRsResultIfDesc::SP aResult) override final;
+    virtual GpReflectObject::CSP    Result              (void) const override final;
+    virtual GpReflectObject::SP     Result              (void) override final;
+    virtual void                    SetResult           (GpReflectObject::SP aResult) override final;
 
 public:
-    std::string                         jsonrpc = std::string("2.0"_sv);
-    s_int_64                            id      = 1;
-    GpRpcRsResultJsonDesc::SP           error;
+    std::u8string                   jsonrpc = u8"2.0";
+    s_int_64                        id      = 1;
+    GpRpcRsResultJsonDesc::SP       error;
 };
 
 GpRpcRsJsonDesc::GpRpcRsJsonDesc (void) noexcept
@@ -65,9 +67,9 @@ public: \
                         NAME##_rs   (NAME##_rs&& aRs) noexcept; \
     virtual             ~NAME##_rs  (void) noexcept; \
  \
-    virtual std::any    Payload     (void) const override final; \
-    virtual std::any    Payload     (void) override final; \
-    virtual void        SetPayload  (std::any aAny) override final; \
+    virtual GpAny       Payload     (void) const override final; \
+    virtual sGpAny      Payload     (void) override final; \
+    virtual void        SetPayload  (GpAny& aAny) override final; \
  \
 public: \
     DataT               result; \
@@ -96,29 +98,29 @@ NAME##_rs::~NAME##_rs (void) noexcept \
 { \
 } \
  \
-std::any    NAME##_rs::Payload (void) const \
+GpAny   NAME##_rs::Payload (void) const \
 { \
-    return std::make_any<DataTRefC>(result); \
+    return GpAny{DataTRefC(result)}; \
 } \
  \
-std::any    NAME##_rs::Payload (void) \
+GpAny   NAME##_rs::Payload (void) \
 { \
-    return std::make_any<DataTRef>(result); \
+    return GpAny{DataTRef(result)}; \
 } \
  \
-void    NAME##_rs::SetPayload (std::any aAny) \
+void    NAME##_rs::SetPayload (GpAny& aAny) \
 { \
-    const auto& typeInfoAny = aAny.type(); \
+    const auto& typeInfoAny = aAny.TypeInfo(); \
  \
-    if (typeInfoAny == typeid(DataTRef)) \
+    if (GpTypeInfoUtils::SIsSame(typeInfoAny, typeid(DataTRef))) \
     { \
-        result = std::any_cast<DataTRef>(aAny); \
-    } else if (typeInfoAny == typeid(DataTRefC)) \
+        result = aAny.ValueNoCheck<DataTRef>(aAny); \
+    } else if (GpTypeInfoUtils::SIsSame(typeInfoAny, typeid(DataTRefC))) \
     { \
-        result = std::any_cast<DataTRefC>(aAny); \
+        result = aAny.ValueNoCheck<DataTRefC>(aAny); \
     } else \
     { \
-        throw std::bad_any_cast(); \
+        THROW_GP(u8"Unsupported payload type"_sv); \
     } \
 } \
  \
@@ -127,4 +129,4 @@ void    NAME##_rs::_SReflectCollectProps (GpReflectProp::C::Vec::Val& aPropsOut)
     PROP(result); \
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

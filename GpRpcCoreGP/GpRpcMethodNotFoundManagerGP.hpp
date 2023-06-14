@@ -2,7 +2,7 @@
 
 #include "GpRpcMethodsManagerGP.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GP_RPC_CORE_GP_API GpRpcMethodNotFoundManagerGP final: public GpRpcMethodsManagerGP
 {
@@ -20,4 +20,4 @@ protected:
     virtual void                    OnInit                          (void) override final;
 };
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

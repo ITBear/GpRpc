@@ -1,14 +1,17 @@
 #pragma once
 
 #include "../GpRpcCoreGP_global.hpp"
+#include "../../GpRpcCore/RqRs/GpRpcRqIfDesc.hpp"
+#include "../../../GpCore2/GpReflection/GpReflectUtils.hpp"
+#include "../../../GpCore2/GpUtils/TypeTraits/GpTypeInfoUtils.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GP_RPC_CORE_GP_API GpRpcRqGPDesc: public GpRpcRqIfDesc
 {
 public:
     CLASS_DD(GpRpcRqGPDesc)
-    REFLECT_DECLARE("e30c3a62-e95e-496a-abe2-370ff474aeca"_uuid)
+    REFLECT_DECLARE(u8"e30c3a62-e95e-496a-abe2-370ff474aeca"_uuid)
 
 public:
     inline                      GpRpcRqGPDesc   (void) noexcept;
@@ -16,12 +19,12 @@ public:
     inline explicit             GpRpcRqGPDesc   (GpRpcRqGPDesc&& aDesc) noexcept;
     virtual                     ~GpRpcRqGPDesc  (void) noexcept override;
 
-    virtual std::string_view    Method              (void) const override final;
-    virtual void                SetMethod           (std::string_view aMethod) override final;
+    virtual std::u8string_view  Method          (void) const override final;
+    virtual void                SetMethod       (std::u8string_view aMethod) override final;
 
 public:
-    std::string                 method;
-    std::string                 sid;    //TODO: make optional
+    std::u8string               method;
+    std::u8string               sid;    //TODO: make optional
 };
 
 GpRpcRqGPDesc::GpRpcRqGPDesc (void) noexcept
@@ -43,7 +46,7 @@ sid(std::move(aDesc.sid))
 }
 
 #define GP_RPC_RQ(PREFIX, NAME, UUID) \
-class PREFIX NAME##_rq final: public ::GPlatform::RPC::GpRpcRqGPDesc \
+class PREFIX NAME##_rq final: public ::GPlatform::GpRpcRqGPDesc \
 { \
 public: \
     CLASS_DD(NAME##_rq) \
@@ -62,9 +65,9 @@ public: \
                         NAME##_rq   (DataT&& aData) noexcept; \
     virtual             ~NAME##_rq  (void) noexcept; \
  \
-    virtual std::any    Payload     (void) const override final; \
-    virtual std::any    Payload     (void) override final; \
-    virtual void        SetPayload  (std::any aAny) override final; \
+    virtual GpAny       Payload     (void) const override final; \
+    virtual GpAny       Payload     (void) override final; \
+    virtual void        SetPayload  (GpAny& aAny) override final; \
  \
 public: \
     DataT               data; \
@@ -78,13 +81,13 @@ NAME##_rq::NAME##_rq (void) noexcept \
 } \
 \
 NAME##_rq::NAME##_rq (const NAME##_rq& aRq): \
-::GPlatform::RPC::GpRpcRqGPDesc(aRq), \
+::GPlatform::GpRpcRqGPDesc(aRq), \
 data(GpReflectUtils::SCopyValue(aRq.data)) \
 { \
 } \
  \
 NAME##_rq::NAME##_rq (NAME##_rq&& aRq) noexcept: \
-::GPlatform::RPC::GpRpcRqGPDesc(std::move(aRq)), \
+::GPlatform::GpRpcRqGPDesc(std::move(aRq)), \
 data(std::move(aRq.data)) \
 { \
 } \
@@ -98,29 +101,29 @@ NAME##_rq::~NAME##_rq (void) noexcept \
 { \
 } \
  \
-std::any    NAME##_rq::Payload (void) const \
+GpAny   NAME##_rq::Payload (void) const \
 { \
-   return std::make_any<DataTRefC>(data); \
+   return GpAny{DataTRefC(data)}; \
 } \
  \
-std::any    NAME##_rq::Payload (void) \
+GpAny   NAME##_rq::Payload (void) \
 { \
-   return std::make_any<DataTRef>(data); \
+   return GpAny{DataTRef(data)}; \
 } \
  \
-void    NAME##_rq::SetPayload (std::any aAny) \
+void    NAME##_rq::SetPayload (GpAny& aAny) \
 { \
-   const auto& typeInfoAny = aAny.type(); \
+   const auto& typeInfoAny = aAny.TypeInfo(); \
 \
-   if (typeInfoAny == typeid(DataTRef)) \
+   if (GpTypeInfoUtils::SIsSame(typeInfoAny, typeid(DataTRef))) \
    { \
-       data = std::any_cast<DataTRef>(aAny); \
-   } else if (typeInfoAny == typeid(DataTRefC)) \
+        data = aAny.ValueNoCheck<DataTRef>(); \
+   } else if (GpTypeInfoUtils::SIsSame(typeInfoAny, typeid(DataTRefC))) \
    { \
-       data = std::any_cast<DataTRefC>(aAny); \
+        data = aAny.ValueNoCheck<DataTRefC>(); \
    } else \
    { \
-       throw std::bad_any_cast(); \
+        THROW_GP(u8"Unsupported payload type"_sv); \
    } \
 } \
  \
@@ -129,4 +132,4 @@ void    NAME##_rq::_SReflectCollectProps (GpReflectProp::C::Vec::Val& aPropsOut)
     PROP(data); \
 }
 
-}//GPlatform::RPC
+}//GPlatform

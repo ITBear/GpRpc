@@ -1,6 +1,8 @@
 #include "GpRpcMethodNotFoundManagerGP.hpp"
+#include "../../GpCore2/GpReflection/GpReflectManager.hpp"
+#include "../../GpCore2/GpUtils/Exceptions/GpException.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 using gp_rcp_method_not_found_default_rs_data   = GpRpcVoidDesc::SP;
 using gp_rcp_method_not_found_default_rs_result = GpRpcRsResultGPDesc::SP;
@@ -25,4 +27,4 @@ void    GpRpcMethodNotFoundManagerGP::OnInit (void)
 {
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

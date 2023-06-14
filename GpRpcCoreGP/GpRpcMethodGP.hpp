@@ -2,11 +2,11 @@
 
 #include "RqRs/GpRpcRqRsGP.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 #define GP_RPC_METHOD(NAME) \
  \
-class NAME final: public ::GPlatform::RPC::GpRpcMethod \
+class NAME final: public ::GPlatform::GpRpcMethod \
 { \
 public: \
     CLASS_REMOVE_CTRS_MOVE_COPY(NAME) \
@@ -15,17 +15,17 @@ public: \
     using RqT   = NAME##_rq; \
     using RsT   = NAME##_rs; \
  \
-    static ::GPlatform::RPC::GpRpcMethodFactory::SP SFactory    (void); \
+    static ::GPlatform::GpRpcMethodFactory::SP  SFactory    (void); \
  \
 public: \
                                             NAME            (void) noexcept; \
     virtual                                 ~NAME           (void) noexcept override final; \
  \
-    virtual ::GPlatform::RPC::GpRpcRsIfDesc::SP \
-                                            Process         (::GPlatform::RPC::GpRpcRqIfDesc& aRq) override final; \
+    virtual ::GPlatform::GpRpcRsIfDesc::SP \
+                                            Process         (::GPlatform::GpRpcRqIfDesc& aRq) override final; \
     virtual const GpReflectModel&           RqReflectModel  (void) const noexcept override final; \
     virtual const GpReflectModel&           RsReflectModel  (void) const noexcept override final; \
-    virtual std::string_view                MethodName      (void) const noexcept override final; \
+    virtual std::u8string_view              MethodName      (void) const noexcept override final; \
  \
 protected: \
     typename RsT::DataT                     _Process            (RqT& aRq); \
@@ -33,22 +33,22 @@ protected: \
 
 #define GP_RPC_METHOD_IMPL(NAME) \
  \
-class NAME##_Factory final: public ::GPlatform::RPC::GpRpcMethodFactory \
+class NAME##_Factory final: public ::GPlatform::GpRpcMethodFactory \
 { \
 public: \
     CLASS_REMOVE_CTRS_MOVE_COPY(NAME##_Factory) \
     CLASS_DD(NAME##_Factory) \
  \
 public: \
-                                NAME##_Factory  (void) noexcept: ::GPlatform::RPC::GpRpcMethodFactory(#NAME) {} \
+                                NAME##_Factory  (void) noexcept: ::GPlatform::GpRpcMethodFactory(GpUTF::S_STR_To_UTF8(#NAME)) {} \
     virtual                     ~NAME##_Factory (void) noexcept override final {} \
  \
-    virtual GpSP<::GPlatform::RPC::GpRpcMethod> \
+    virtual GpSP<::GPlatform::GpRpcMethod> \
                                 NewInstance     (void) const override final {return MakeSP<NAME>();} \
  \
 }; \
  \
-::GPlatform::RPC::GpRpcMethodFactory::SP    NAME::SFactory (void) \
+::GPlatform::GpRpcMethodFactory::SP NAME::SFactory (void) \
 { \
     return MakeSP<NAME##_Factory>(); \
 } \
@@ -61,11 +61,12 @@ NAME::~NAME (void) noexcept \
 { \
 } \
  \
-::GPlatform::RPC::GpRpcRsIfDesc::SP NAME::Process (::GPlatform::RPC::GpRpcRqIfDesc& aRq) \
+::GPlatform::GpRpcRsIfDesc::SP  NAME::Process (::GPlatform::GpRpcRqIfDesc& aRq) \
 { \
-    RsT::SP     rs      = MakeSP<RsT>(); \
-    RsT::DataT  rsData  = _Process(static_cast<RqT&>(aRq)); \
-    rs.Vn().SetPayload(std::make_any<typename RsT::DataTRef>(rsData)); \
+    RsT::SP     rs          = MakeSP<RsT>(); \
+    RsT::DataT  rsData      = _Process(static_cast<RqT&>(aRq)); \
+    auto        rsDataAny   = GpAny{typename RsT::DataTRef(rsData)}; \
+    rs.Vn().SetPayload(rsDataAny); \
  \
     return rs; \
 } \
@@ -80,9 +81,9 @@ const GpReflectModel&   NAME::RsReflectModel (void) const noexcept \
     return RsT::SReflectModel(); \
 } \
  \
-std::string_view    NAME::MethodName (void) const noexcept \
+std::u8string_view  NAME::MethodName (void) const noexcept \
 { \
-    return std::string_view(#NAME); \
+    return GpUTF::S_STR_To_UTF8(#NAME); \
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

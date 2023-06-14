@@ -2,7 +2,7 @@
 
 #include "GpRpcMethodDetector.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GpRpcMethodDetectorFactory
 {
@@ -16,7 +16,7 @@ protected:
 public:
     virtual                         ~GpRpcMethodDetectorFactory (void) noexcept {}
 
-    virtual GpRpcMethodDetector::SP NewInstance                 (GpSpanPtrByteR aData) const = 0;
+    virtual GpRpcMethodDetector::SP NewInstance                 (GpSpanPtrCharRW aData) const = 0;
 };
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

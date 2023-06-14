@@ -1,6 +1,7 @@
 #include "GpRpcCliTransportHttp.hpp"
+#include "../../../GpCore2/GpUtils/Streams/GpByteWriterStorageByteArray.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 GpRpcCliTransportHttp::~GpRpcCliTransportHttp (void) noexcept
 {
@@ -8,12 +9,12 @@ GpRpcCliTransportHttp::~GpRpcCliTransportHttp (void) noexcept
 
 GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
 (
-    const GpReflectObject&                      aRq,
-    const std::vector<const GpReflectModel*>&   aRsTypeStructVariants,
-    std::optional<SerializeRqFnT>               aBeforeSerializeRqFn,
-    std::optional<SerializeRqFnT>               aAfterSerializeRqFn,
-    std::optional<ProcessRqRsFnT>               aBeforeProcessFn,
-    std::optional<ProcessRqRsFnT>               aAfterProcessFn
+    std::optional<GpReflectObject::C::Ref::CVal>    aRq,
+    const std::vector<const GpReflectModel*>&       aRsTypeStructVariants,
+    std::optional<SerializeRqFnT>                   aBeforeSerializeRqFn,
+    std::optional<SerializeRqFnT>                   aAfterSerializeRqFn,
+    std::optional<ProcessRqRsFnT>                   aBeforeProcessFn,
+    std::optional<ProcessRqRsFnT>                   aAfterProcessFn
 )
 {
     const GpReflectSerializer& serializer = iSerializer.V();
@@ -25,7 +26,10 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
     {
         //Serialize RQ to body
         GpBytesArray body;
+        if (aRq.has_value())
         {
+            const GpReflectObject& rqDesc = aRq.value().get();
+
             body.resize(1024);//TODO: move to factory
 
             GpByteWriterStorageByteArray    bodyStorage(body);
@@ -39,7 +43,7 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
 
             if (serializeRqFnRes == SerializeRqFnRes::CONTINUE)
             {
-                serializer.FromObject(aRq, bodyWriter);
+                serializer.FromObject(rqDesc, bodyWriter);
             }
 
             if (aAfterSerializeRqFn.has_value())
@@ -64,7 +68,8 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
 
         if (aBeforeProcessFn.has_value())
         {
-            aBeforeProcessFn.value()(std::make_any<GpHttpRequest::SP>(httpRq));
+            auto rq = GpAny{GpHttpRequest::SP(httpRq)};
+            aBeforeProcessFn.value()(rq);
         }
 
         //Do HTTP RQ
@@ -73,11 +78,12 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
 
     if (aAfterProcessFn.has_value())
     {
-        aAfterProcessFn.value()(std::make_any<GpHttpResponse::SP>(httpRs));
+        auto rs = GpAny{GpHttpResponse::SP(httpRs)};
+        aAfterProcessFn.value()(rs);
     }
 
     //Deserialize RS
     return serializer.ToObject(httpRs.V().body, aRsTypeStructVariants);
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

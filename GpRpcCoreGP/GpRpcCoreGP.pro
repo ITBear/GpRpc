@@ -29,9 +29,11 @@ SOURCES += \
     GpRpcMethodNotFoundManagerGP.cpp \
     GpRpcMethodNotFoundThrowerGP.cpp \
     GpRpcMethodsManagerGP.cpp \
+    GpRpcPropValidationResDesc.cpp \
     RqRs/GpRpcRqGPDesc.cpp \
     RqRs/GpRpcRsGPDesc.cpp \
-    RqRs/GpRpcRsResultGPDesc.cpp
+    RqRs/GpRpcRsResultGPDesc.cpp \
+    RqRs/GpRpcRsResultItemsException.cpp
 
 HEADERS += \
     GpRpcClientGP.hpp \
@@ -46,7 +48,10 @@ HEADERS += \
     GpRpcMethodNotFoundManagerGP.hpp \
     GpRpcMethodNotFoundThrowerGP.hpp \
     GpRpcMethodsManagerGP.hpp \
+    GpRpcPropValidationResDesc.hpp \
     RqRs/GpRpcRqGPDesc.hpp \
     RqRs/GpRpcRqRsGP.hpp \
     RqRs/GpRpcRsGPDesc.hpp \
-    RqRs/GpRpcRsResultGPDesc.hpp
+    RqRs/GpRpcRsResultGPDesc.hpp \
+    RqRs/GpRpcRsResultItemsException.hpp \
+    RqRs/GpRpcRsResultItemsManager.hpp

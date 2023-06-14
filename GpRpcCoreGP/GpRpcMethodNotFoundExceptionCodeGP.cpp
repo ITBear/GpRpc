@@ -1,7 +1,7 @@
 #include "GpRpcMethodNotFoundExceptionCodeGP.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
-GP_ENUM_IMPL(GpRpcMethodNotFoundExceptionCodeGP);
+GP_ENUM_IMPL(GpRpcMethodNotFoundExceptionCodeGP)
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

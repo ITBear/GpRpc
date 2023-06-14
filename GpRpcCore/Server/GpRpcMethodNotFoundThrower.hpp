@@ -1,8 +1,10 @@
 #pragma once
 
 #include "../GpRpcCore_global.hpp"
+#include "../../../GpCore2/GpUtils/Macro/GpMacroClass.hpp"
+#include "../../../GpCore2/GpUtils/Types/Containers/GpContainersT.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GP_RPC_CORE_API GpRpcMethodNotFoundThrower
 {
@@ -16,7 +18,7 @@ protected:
 public:
     virtual                     ~GpRpcMethodNotFoundThrower (void) noexcept = default;
 
-    virtual void                Throw                       (std::string_view aMethodName) const = 0;
+    virtual void                Throw                       (std::u8string_view aMethodName) const = 0;
 };
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

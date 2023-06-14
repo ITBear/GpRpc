@@ -1,36 +1,38 @@
 #include "GpRpcRqIfDesc.hpp"
+#include "../../../GpCore2/GpReflection/GpReflectManager.hpp"
+#include "../../../GpCore2/GpReflection/GpReflectUtils.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 REFLECT_IMPLEMENT(GpRpcRqIfDesc, GP_MODULE_UUID)
 
-std::string_view    GpRpcRqIfDesc::Method (void) const
+std::u8string_view  GpRpcRqIfDesc::Method (void) const
 {
-    THROW_GP("Need to be overridden"_sv);
+    THROW_GP(u8"Need to be overridden"_sv);
 }
 
-void    GpRpcRqIfDesc::SetMethod (std::string_view /*aMethod*/)
+void    GpRpcRqIfDesc::SetMethod (std::u8string_view /*aMethod*/)
 {
-    THROW_GP("Need to be overridden"_sv);
+    THROW_GP(u8"Need to be overridden"_sv);
 }
 
-std::any    GpRpcRqIfDesc::Payload (void) const
+GpAny   GpRpcRqIfDesc::Payload (void) const
 {
-    THROW_GP("Need to be overridden"_sv);
+    THROW_GP(u8"Need to be overridden"_sv);
 }
 
-std::any    GpRpcRqIfDesc::Payload (void)
+GpAny   GpRpcRqIfDesc::Payload (void)
 {
-    THROW_GP("Need to be overridden"_sv);
+    THROW_GP(u8"Need to be overridden"_sv);
 }
 
-void    GpRpcRqIfDesc::SetPayload (std::any /*aAny*/)
+void    GpRpcRqIfDesc::SetPayload (GpAny& /*aAny*/)
 {
-    THROW_GP("Need to be overridden"_sv);
+    THROW_GP(u8"Need to be overridden"_sv);
 }
 
 void    GpRpcRqIfDesc::_SReflectCollectProps (GpReflectProp::C::Vec::Val& /*aPropsOut*/)
 {
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

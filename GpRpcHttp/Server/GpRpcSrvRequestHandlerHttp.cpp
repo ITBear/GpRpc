@@ -1,12 +1,12 @@
 #include "GpRpcSrvRequestHandlerHttp.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 GpRpcSrvRequestHandlerHttp::~GpRpcSrvRequestHandlerHttp (void) noexcept
 {
 }
 
-GpHttpResponse::SP  GpRpcSrvRequestHandlerHttp::OnRequest (const GpHttpRequest& aRequest)
+GpHttpResponse::SP  GpRpcSrvRequestHandlerHttp::OnRequest (GpHttpRequest& aRequest)
 {
     GpRpcRqIfDesc::SP rq;
     GpRpcRsIfDesc::SP rs;
@@ -17,17 +17,28 @@ GpHttpResponse::SP  GpRpcSrvRequestHandlerHttp::OnRequest (const GpHttpRequest& 
 
     try
     {
-        const GpSpanPtrByteR rqBody = aRequest.body;
+        GpBytesArray&   rqBody      = aRequest.body;
+        const size_t    rqBodySize  = rqBody.size();
 
-        if (rqBody.Count() == 0)
+        rqBody.resize(NumOps::SAdd<size_t>(rqBodySize, 1));
+        rqBody[rqBodySize] = 0;//null terminator
+
+        //aRequest.body.capacity();
+        //aRequest.body.size();
+
+        const GpSpanPtrByteRW rqBodySpan(rqBody.data(), rqBodySize);
+
+        if (rqBodySpan.Count() == 0)
         {
             THROW_HTTP(GpHttpResponseCode::BAD_REQUEST_400, "Body is empty"_sv);
         }
 
         //Detect type
-        auto                methodDetector          = iMethodDetectorFactory.V().NewInstance(rqBody);
-        const std::string   methodName              = methodDetector.V().DetectApiMethodName();
-        auto                [managerSP, methodSP]   = iRpcManagersGroup.V().FindManagerAndMethod(methodName);
+        auto methodDetector             = iMethodDetectorFactory.V().NewInstance(rqBodySpan);
+        auto [methodNameOpt, rqBodyCtx] = methodDetector.V().DetectApiMethodName();
+        auto [managerSP, methodSP]      = iRpcManagersGroup.V().Find(methodNameOpt);
+
+        const std::optional<std::u8string>& methodNameOptRef = methodNameOpt;
 
         if (   managerSP.IsNotNULL()
             && methodSP.IsNotNULL())
@@ -36,7 +47,7 @@ GpHttpResponse::SP  GpRpcSrvRequestHandlerHttp::OnRequest (const GpHttpRequest& 
             apiMethodsManager   = managerSP;
 
             //Deserialize RQ data
-            rq = serializer.Vn().ToObject(rqBody, method.RqReflectModel()).CastAs<GpRpcRqIfDesc::SP>();
+            rq = serializer.Vn().ToObject(rqBodyCtx.V(), method.RqReflectModel()).CastAs<GpRpcRqIfDesc::SP>();
 
             //Call method
             auto result = apiMethodsManager.V().CallAndCatch([&](){rs = method.Process(rq.Vn());});
@@ -52,7 +63,13 @@ GpHttpResponse::SP  GpRpcSrvRequestHandlerHttp::OnRequest (const GpHttpRequest& 
             apiMethodsManager = iRpcManagersGroup.V().MethodNotFoundManager();
 
             rs = apiMethodsManager.V().NewDefaultRs();
-            auto result = apiMethodsManager.V().CallAndCatch([&](){iRpcManagersGroup.V().ThrowMethodNotFound(methodName);});
+            auto result = apiMethodsManager.V().CallAndCatch
+            (
+                [&]()
+                {
+                    iRpcManagersGroup.V().ThrowMethodNotFound(methodNameOptRef);
+                }
+            );
             rs.V().SetResult(result);
         }
     } catch (const GpHttpException&)
@@ -96,4 +113,4 @@ GpHttpResponse::SP  GpRpcSrvRequestHandlerHttp::OnRequest (const GpHttpRequest& 
     return httpRs;
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

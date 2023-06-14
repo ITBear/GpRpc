@@ -1,34 +1,20 @@
 #include "GpRpcMethodDetectorJsonGP.hpp"
-#include "../../GpJson/GpJsonToObject.hpp"
+#include "../../GpJson/GpJsonSerializerCtx.hpp"
 
-namespace GPlatform::RPC {
-
-GpRpcMethodDetectorJsonGP::GpRpcMethodDetectorJsonGP (std::string_view aJsonStr) noexcept:
-iJsonStr(aJsonStr)
-{
-}
+namespace GPlatform {
 
 GpRpcMethodDetectorJsonGP::~GpRpcMethodDetectorJsonGP (void) noexcept
 {
 }
 
-std::string GpRpcMethodDetectorJsonGP::DetectApiMethodName (void) const
+GpRpcMethodDetector::ResT   GpRpcMethodDetectorJsonGP::DetectApiMethodName (void) const
 {
-    //TODO: use parsing result in upper levels (API payload deserialize). Return jsonObject
+    GpJsonSerializerCtx::SP rqCtxSP = MakeSP<GpJsonSerializerCtx>();
+    GpJsonSerializerCtx&    rqCtx   = rqCtxSP.Vn();
 
-    rapidjson::Document                         jsonDOM;
-    rapidjson::Document::ConstObject            jsonObject  = GpJsonToObject::SParseJsonDom(iJsonStr, jsonDOM);
-    rapidjson::Document::ConstMemberIterator    mit         = jsonObject.FindMember("method");
+    rqCtx.Init(iJsonStr);
 
-    THROW_COND_GP
-    (
-        mit != jsonObject.MemberEnd(),
-        "Json member 'method' was not found"_sv
-    );
-
-    const auto& mitVal = mit->value;
-
-    return std::string{mitVal.GetString(), mitVal.GetStringLength()};
+    return {rqCtx.FindMemberStr(u8"method"), rqCtxSP};
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

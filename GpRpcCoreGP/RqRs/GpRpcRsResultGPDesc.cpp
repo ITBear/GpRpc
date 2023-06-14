@@ -1,32 +1,9 @@
 #include "GpRpcRsResultGPDesc.hpp"
+#include "../../../GpCore2/GpReflection/GpReflectManager.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 REFLECT_IMPLEMENT(GpRpcRsResultGPDesc, GP_MODULE_UUID)
-
-GpRpcRsResultGPDesc::GpRpcRsResultGPDesc (const GpRpcRsResultGPDesc& aDesc):
-GpRpcRsResultIfDesc(aDesc),
-code(aDesc.code),
-msg(aDesc.msg)
-{
-}
-
-GpRpcRsResultGPDesc::GpRpcRsResultGPDesc (GpRpcRsResultGPDesc&& aDesc) noexcept:
-GpRpcRsResultIfDesc(std::move(aDesc)),
-code(std::move(aDesc.code)),
-msg(std::move(aDesc.msg))
-{
-}
-
-GpRpcRsResultGPDesc::GpRpcRsResultGPDesc
-(
-    std::string aCode,
-    std::string aMsg
-) noexcept:
-code(std::move(aCode)),
-msg(std::move(aMsg))
-{
-}
 
 GpRpcRsResultGPDesc::~GpRpcRsResultGPDesc (void) noexcept
 {
@@ -36,6 +13,7 @@ void    GpRpcRsResultGPDesc::_SReflectCollectProps (GpReflectProp::C::Vec::Val& 
 {
     PROP(code);
     PROP(msg);
+    PROP(items);
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

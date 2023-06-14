@@ -1,20 +1,34 @@
 #pragma once
 
 #include "../GpRpcCore_global.hpp"
+#include "../../../GpCore2/GpUtils/Macro/GpMacroClass.hpp"
+#include "../../../GpCore2/GpUtils/Types/Containers/GpContainersT.hpp"
+#include "../../../GpCore2/GpUtils/Types/Containers/GpAny.hpp"
+#include "../../../GpCore2/GpReflection/GpReflectObject.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
-class GP_RPC_CORE_API GpRpcVoidDesc: public GpReflectObject
+class GP_RPC_CORE_API GpRpcVoidDesc final: public GpReflectObject
 {
 public:
     CLASS_DD(GpRpcVoidDesc)
-    REFLECT_DECLARE("f38857d3-6c29-414b-9761-4128391a2a33"_uuid)
+    REFLECT_DECLARE(u8"f38857d3-6c29-414b-9761-4128391a2a33"_uuid)
 
 public:
-                        GpRpcVoidDesc   (void) noexcept {}
-    explicit            GpRpcVoidDesc   (const GpRpcVoidDesc& aDesc) noexcept: GpReflectObject(aDesc){};
-    explicit            GpRpcVoidDesc   (GpRpcVoidDesc&& aDesc) noexcept: GpReflectObject(std::move(aDesc)){};
-    virtual             ~GpRpcVoidDesc  (void) noexcept override {}
+                        GpRpcVoidDesc   (void) noexcept = default;
+    inline              GpRpcVoidDesc   (const GpRpcVoidDesc& aDesc) noexcept;
+    inline              GpRpcVoidDesc   (GpRpcVoidDesc&& aDesc) noexcept;
+    virtual             ~GpRpcVoidDesc  (void) noexcept override final;
 };
 
-}//namespace GPlatform::RPC
+GpRpcVoidDesc::GpRpcVoidDesc (const GpRpcVoidDesc& aDesc) noexcept:
+GpReflectObject(aDesc)
+{
+}
+
+GpRpcVoidDesc::GpRpcVoidDesc (GpRpcVoidDesc&& aDesc) noexcept:
+GpReflectObject(std::move(aDesc))
+{
+}
+
+}//namespace GPlatform

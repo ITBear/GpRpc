@@ -2,7 +2,7 @@
 
 #include "GpRpcClient.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 /*
 class GpRpcClientRaw: public GpRpcClient
 {
@@ -67,4 +67,4 @@ typename RS::SP GpRpcClientRaw::ProcessRQ
     return GpReflectManager::SCastSP<typename RS::SP>(rsBase);
 }*/
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../GpRpcCore/GpRpcCore.hpp"
+#include "../../GpCore2/GpUtils/Macro/GpMacroImportExport.hpp"
 
 #if defined(GP_RPC_CORE_JSON_LIBRARY)
     #define GP_RPC_CORE_JSON_API GP_DECL_EXPORT

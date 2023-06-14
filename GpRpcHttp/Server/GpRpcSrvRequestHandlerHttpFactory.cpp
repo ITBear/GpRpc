@@ -1,7 +1,7 @@
 #include "GpRpcSrvRequestHandlerHttpFactory.hpp"
 #include "GpRpcSrvRequestHandlerHttp.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 GpRpcSrvRequestHandlerHttpFactory::~GpRpcSrvRequestHandlerHttpFactory (void) noexcept
 {
@@ -17,4 +17,4 @@ GpHttpRequestHandler::SP    GpRpcSrvRequestHandlerHttpFactory::NewInstance (void
     );
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

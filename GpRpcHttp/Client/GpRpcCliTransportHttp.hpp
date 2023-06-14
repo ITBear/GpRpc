@@ -1,9 +1,12 @@
 #pragma once
 
 #include "../GpRpcHttp_global.hpp"
+#include "../../GpRpcCore/Client/GpRpcCliTransport.hpp"
+#include "../../../GpCore2/GpReflection/Serializers/GpReflectSerializer.hpp"
+#include "../../../GpNetwork/GpNetworkHttp/GpNetworkHttpCore/Client/GpHttpClient.hpp"
 #include <optional>
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GpRpcCliTransportHttp final: public GpRpcCliTransport
 {
@@ -14,23 +17,23 @@ public:
 public:
     inline                      GpRpcCliTransportHttp   (GpReflectSerializer::SP    aSerializer,
                                                          GpHttpClient::SP           aHttpClient) noexcept;
-    inline                      GpRpcCliTransportHttp   (std::string                aURL,
+    inline                      GpRpcCliTransportHttp   (std::u8string              aURL,
                                                          GpReflectSerializer::SP    aSerializer,
                                                          GpHttpClient::SP           aHttpClient) noexcept;
     virtual                     ~GpRpcCliTransportHttp  (void) noexcept override final;
 
-    std::string_view            URL                     (void) const noexcept {return iURL;}
-    void                        SetURL                  (std::string_view aURL) {iURL = aURL;}
+    std::u8string_view          URL                     (void) const noexcept {return iURL;}
+    void                        SetURL                  (std::u8string_view aURL) {iURL = aURL;}
 
-    virtual GpReflectObject::SP ProcessRQ               (const GpReflectObject&                     aRq,
-                                                         const std::vector<const GpReflectModel*>&  aRsTypeStructVariants,
-                                                         std::optional<SerializeRqFnT>              aBeforeSerializeRqFn,
-                                                         std::optional<SerializeRqFnT>              aAfterSerializeRqFn,
-                                                         std::optional<ProcessRqRsFnT>              aBeforeProcessFn,
-                                                         std::optional<ProcessRqRsFnT>              aAfterProcessFn) override final;
+    virtual GpReflectObject::SP ProcessRQ               (std::optional<GpReflectObject::C::Ref::CVal>   aRq,
+                                                         const std::vector<const GpReflectModel*>&      aRsTypeStructVariants,
+                                                         std::optional<SerializeRqFnT>                  aBeforeSerializeRqFn,
+                                                         std::optional<SerializeRqFnT>                  aAfterSerializeRqFn,
+                                                         std::optional<ProcessRqRsFnT>                  aBeforeProcessFn,
+                                                         std::optional<ProcessRqRsFnT>                  aAfterProcessFn) override final;
 
 private:
-    std::string                 iURL;
+    std::u8string               iURL;
     GpReflectSerializer::SP     iSerializer;
     GpHttpClient::SP            iHttpClient;
 };
@@ -47,7 +50,7 @@ iHttpClient(std::move(aHttpClient))
 
 GpRpcCliTransportHttp::GpRpcCliTransportHttp
 (
-    std::string             aURL,
+    std::u8string           aURL,
     GpReflectSerializer::SP aSerializer,
     GpHttpClient::SP        aHttpClient
 ) noexcept:
@@ -57,4 +60,4 @@ iHttpClient(std::move(aHttpClient))
 {
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

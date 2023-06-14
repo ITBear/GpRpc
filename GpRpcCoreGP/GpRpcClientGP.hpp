@@ -1,8 +1,12 @@
 #pragma once
 
 #include "GpRpcCoreGP_global.hpp"
+#include "../GpRpcCore/Client/GpRpcClient.hpp"
+#include "../GpRpcCore/RqRs/GpRpcRqIfDesc.hpp"
+#include "../GpRpcCore/RqRs/GpRpcRsIfDesc.hpp"
+#include "../../GpCore2/GpReflection/GpReflectManager.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GP_RPC_CORE_GP_API GpRpcClientGP: public GpRpcClient
 {
@@ -22,7 +26,7 @@ public:
 
     template<typename RQ, typename RS>
     typename RS::DataT              ProcessRQ       (const typename RQ::DataT&              aRqData,
-                                                     std::string_view                       aMethodName,
+                                                     std::u8string_view                     aMethodName,
                                                      std::optional<TransportSerializeRqFnT> aBeforeTransportSerializeRqFn   = std::nullopt,
                                                      std::optional<TransportSerializeRqFnT> aAfterTransportSerializeRqFn    = std::nullopt,
                                                      std::optional<TransportProcessRqRsFnT> aBeforeTransportProcessFn       = std::nullopt,
@@ -30,7 +34,7 @@ public:
 
 protected:
     virtual void                    CheckRsResult   (const GpRpcRsIfDesc&   aRsDesc,
-                                                     std::string_view       aMethodName);
+                                                     std::u8string_view     aMethodName);
     virtual void                    OnBeforeRQ      (GpRpcRqIfDesc& aRq);
 };
 
@@ -43,7 +47,7 @@ template<typename RQ, typename RS>
 typename RS::DataT  GpRpcClientGP::ProcessRQ
 (
     const typename RQ::DataT&               aRqData,
-    std::string_view                        aMethodName,
+    std::u8string_view                      aMethodName,
     std::optional<TransportSerializeRqFnT>  aBeforeTransportSerializeRqFn,
     std::optional<TransportSerializeRqFnT>  aAfterTransportSerializeRqFn,
     std::optional<TransportProcessRqRsFnT>  aBeforeTransportProcessFn,
@@ -52,7 +56,10 @@ typename RS::DataT  GpRpcClientGP::ProcessRQ
 {
     RQ rq;
     rq.SetMethod(aMethodName);
-    rq.SetPayload(std::make_any<typename RQ::DataTRefC>(aRqData));
+    {
+        auto rqDataAny = GpAny{typename RQ::DataTRefC(aRqData)};
+        rq.SetPayload(rqDataAny);
+    }
 
     OnBeforeRQ(rq);
 
@@ -75,7 +82,7 @@ typename RS::DataT  GpRpcClientGP::ProcessRQ
     //Cast type
     RS& rs = GpReflectManager::SCastRef<RS>(rsRpc);
 
-    return std::any_cast<typename RS::DataTRef>(rs.Payload());
+    return rs.Payload().template Value<typename RS::DataTRef>();
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

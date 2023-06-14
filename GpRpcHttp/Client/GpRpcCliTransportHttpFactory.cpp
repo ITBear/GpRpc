@@ -1,7 +1,7 @@
 #include "GpRpcCliTransportHttpFactory.hpp"
 #include "GpRpcCliTransportHttp.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 GpRpcCliTransportHttpFactory::~GpRpcCliTransportHttpFactory (void) noexcept
 {
@@ -17,4 +17,4 @@ GpRpcCliTransport::SP   GpRpcCliTransportHttpFactory::NewInstance (void) const
     );
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

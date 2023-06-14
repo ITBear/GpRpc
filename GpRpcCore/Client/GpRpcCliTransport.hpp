@@ -1,8 +1,13 @@
 #pragma once
 
 #include "../GpRpcCore_global.hpp"
+#include "../../../GpCore2/GpUtils/Macro/GpMacroClass.hpp"
+#include "../../../GpCore2/GpUtils/Types/Containers/GpContainersT.hpp"
+#include "../../../GpCore2/GpUtils/Types/Containers/GpAny.hpp"
+#include "../../../GpCore2/GpUtils/Streams/GpByteWriter.hpp"
+#include "../../../GpCore2/GpReflection/GpReflectObject.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GpRpcCliTransport
 {
@@ -17,7 +22,7 @@ public:
     };
 
     using SerializeRqFnT    = std::function<SerializeRqFnRes(GpByteWriter& aRqWriter)>;
-    using ProcessRqRsFnT    = std::function<void(std::any aRq)>;
+    using ProcessRqRsFnT    = std::function<void(GpAny& aRq)>;
 
 public:
                                     GpRpcCliTransport       (void) noexcept {}
@@ -28,15 +33,15 @@ public:
                                                              std::optional<ProcessRqRsFnT>  aBeforeProcessFn,
                                                              std::optional<ProcessRqRsFnT>  aAfterProcessFn);
 
-    inline GpReflectObject::SP      ProcessRQ               (const GpReflectObject&                     aRq,
-                                                             const std::vector<const GpReflectModel*>&  aRsTypeStructVariants);
+    inline GpReflectObject::SP      ProcessRQ               (std::optional<GpReflectObject::C::Ref::CVal>   aRq,
+                                                             const std::vector<const GpReflectModel*>&      aRsTypeStructVariants);
 
-    virtual GpReflectObject::SP     ProcessRQ               (const GpReflectObject&                 aRq,
-                                                             const std::vector<const GpReflectModel*>&  aRsTypeStructVariants,
-                                                             std::optional<SerializeRqFnT>              aBeforeSerializeRqFn,
-                                                             std::optional<SerializeRqFnT>              aAfterSerializeRqFn,
-                                                             std::optional<ProcessRqRsFnT>              aBeforeProcessFn,
-                                                             std::optional<ProcessRqRsFnT>              aAfterProcessFn) = 0;
+    virtual GpReflectObject::SP     ProcessRQ               (std::optional<GpReflectObject::C::Ref::CVal>   aRq,
+                                                             const std::vector<const GpReflectModel*>&      aRsTypeStructVariants,
+                                                             std::optional<SerializeRqFnT>                  aBeforeSerializeRqFn,
+                                                             std::optional<SerializeRqFnT>                  aAfterSerializeRqFn,
+                                                             std::optional<ProcessRqRsFnT>                  aBeforeProcessFn,
+                                                             std::optional<ProcessRqRsFnT>                  aAfterProcessFn) = 0;
 
 private:
     std::optional<SerializeRqFnT>   iBeforeSerializeRqFn;
@@ -61,8 +66,8 @@ void    GpRpcCliTransport::SetDefaultProcessFns
 
 GpReflectObject::SP GpRpcCliTransport::ProcessRQ
 (
-    const GpReflectObject&                      aRq,
-    const std::vector<const GpReflectModel*>&   aRsTypeStructVariants
+    std::optional<GpReflectObject::C::Ref::CVal>    aRq,
+    const std::vector<const GpReflectModel*>&       aRsTypeStructVariants
 )
 {
     return ProcessRQ
@@ -76,4 +81,4 @@ GpReflectObject::SP GpRpcCliTransport::ProcessRQ
     );
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

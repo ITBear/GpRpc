@@ -1,6 +1,7 @@
 #include "GpRpcRsJsonDesc.hpp"
+#include "../../GpCore2/GpReflection/GpReflectManager.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 REFLECT_IMPLEMENT(GpRpcRsJsonDesc, GP_MODULE_UUID)
 
@@ -8,17 +9,17 @@ GpRpcRsJsonDesc::~GpRpcRsJsonDesc (void) noexcept
 {
 }
 
-GpRpcRsResultIfDesc::CSP    GpRpcRsJsonDesc::Result (void) const
+GpReflectObject::CSP    GpRpcRsJsonDesc::Result (void) const
 {
     return error;
 }
 
-GpRpcRsResultIfDesc::SP GpRpcRsJsonDesc::Result (void)
+GpReflectObject::SP GpRpcRsJsonDesc::Result (void)
 {
     return error;
 }
 
-void    GpRpcRsJsonDesc::SetResult (GpRpcRsResultIfDesc::SP aResult)
+void    GpRpcRsJsonDesc::SetResult (GpReflectObject::SP aResult)
 {
     error = GpReflectManager::SCastSP<GpRpcRsResultJsonDesc::SP>(aResult);
 }
@@ -30,4 +31,4 @@ void    GpRpcRsJsonDesc::_SReflectCollectProps (GpReflectProp::C::Vec::Val& aPro
     PROP(error);
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

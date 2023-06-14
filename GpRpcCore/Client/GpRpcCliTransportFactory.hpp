@@ -2,7 +2,7 @@
 
 #include "GpRpcCliTransport.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GpRpcCliTransportFactory
 {
@@ -19,4 +19,4 @@ public:
     virtual GpRpcCliTransport::SP   NewInstance                 (void) const = 0;
 };
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

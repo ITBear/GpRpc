@@ -1,6 +1,6 @@
 #include "GpRpcMethodsManager.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 void    GpRpcMethodsManager::Init (void)
 {
@@ -10,7 +10,7 @@ void    GpRpcMethodsManager::Init (void)
 void    GpRpcMethodsManager::Register (GpRpcMethodFactory::SP aFactory)
 {
     const auto& factory = aFactory.V();
-    iFactories.Register(factory.MethodName(), aFactory);
+    iFactories.Set(factory.MethodName(), aFactory);
 }
 
 void    GpRpcMethodsManager::Register (GpRpcMethodsRegister& aApiMethodsRegister)
@@ -18,4 +18,4 @@ void    GpRpcMethodsManager::Register (GpRpcMethodsRegister& aApiMethodsRegister
     aApiMethodsRegister.OnInit(*this);
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

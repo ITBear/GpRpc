@@ -1,6 +1,7 @@
 #include "GpRpcRsGPDesc.hpp"
+#include "../../../GpCore2/GpReflection/GpReflectManager.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 REFLECT_IMPLEMENT(GpRpcRsGPDesc, GP_MODULE_UUID)
 
@@ -8,4 +9,4 @@ void    GpRpcRsGPDesc::_SReflectCollectProps (GpReflectProp::C::Vec::Val& /*aPro
 {
 }
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

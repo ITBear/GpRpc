@@ -5,31 +5,36 @@ os_linux {
 		./GpRpcCore \
 		./GpRpcCoreJson \
 		./GpRpcCoreGP \
-		./GpRpcHttp
+		./GpRpcHttp \
+		./GpRpcUtils
 } else:os_android {
 	SUBDIRS += \
 		./GpRpcCore \
 		./GpRpcCoreJson \
 		./GpRpcCoreGP \
-		./GpRpcHttp
+		./GpRpcHttp \
+		./GpRpcUtils
 } else:os_ios {
 	SUBDIRS += \
 		./GpRpcCore \
 		./GpRpcCoreJson \
 		./GpRpcCoreGP \
-		./GpRpcHttp
+		./GpRpcHttp \
+		./GpRpcUtils
 } else:os_windows {
 	SUBDIRS += \
 		./GpRpcCore \
 		./GpRpcCoreJson \
 		./GpRpcCoreGP \
-		./GpRpcHttp
+		./GpRpcHttp \
+		./GpRpcUtils
 } else:os_macx {
 	SUBDIRS += \
 		./GpRpcCore \
 		./GpRpcCoreJson \
 		./GpRpcCoreGP \
-		./GpRpcHttp
+		./GpRpcHttp \
+		./GpRpcUtils
 } else:os_browser {
 	SUBDIRS +=
 } else {

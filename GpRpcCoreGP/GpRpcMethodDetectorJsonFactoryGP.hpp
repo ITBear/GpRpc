@@ -1,8 +1,11 @@
 #pragma once
 
 #include "GpRpcCoreGP_global.hpp"
+#include "../../GpCore2/GpUtils/Macro/GpMacroClass.hpp"
+#include "../../GpCore2/GpUtils/Types/Containers/GpContainersT.hpp"
+#include "../GpRpcCore/Server/GpRpcMethodDetectorFactory.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GP_RPC_CORE_GP_API GpRpcMethodDetectorJsonFactoryGP final: public GpRpcMethodDetectorFactory
 {
@@ -14,7 +17,7 @@ public:
                                     GpRpcMethodDetectorJsonFactoryGP    (void) noexcept;
     virtual                         ~GpRpcMethodDetectorJsonFactoryGP   (void) noexcept override final;
 
-    virtual GpRpcMethodDetector::SP NewInstance                         (GpSpanPtrByteR aData) const override final;
+    virtual GpRpcMethodDetector::SP NewInstance                         (GpSpanPtrCharRW aData) const override final;
 };
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform

@@ -2,7 +2,7 @@
 
 #include "GpRpcMethodFactory.hpp"
 
-namespace GPlatform::RPC {
+namespace GPlatform {
 
 class GpRpcMethodsManager;
 
@@ -21,4 +21,4 @@ public:
     virtual void                OnInit                  (GpRpcMethodsManager& aRpcMethodsManager) = 0;
 };
 
-}//namespace GPlatform::RPC
+}//namespace GPlatform
