@@ -1,5 +1,6 @@
 #include "GpRpcRsJsonDesc.hpp"
-#include "../../GpCore2/GpReflection/GpReflectManager.hpp"
+
+#include <GpCore2/GpReflection/GpReflectManager.hpp>
 
 namespace GPlatform {
 
@@ -24,11 +25,11 @@ void    GpRpcRsJsonDesc::SetResult (GpReflectObject::SP aResult)
     error = GpReflectManager::SCastSP<GpRpcRsResultJsonDesc::SP>(aResult);
 }
 
-void    GpRpcRsJsonDesc::_SReflectCollectProps (GpReflectProp::C::Vec::Val& aPropsOut)
+void    GpRpcRsJsonDesc::_SReflectCollectProps (GpReflectProp::SmallVecVal& aPropsOut)
 {
     PROP(jsonrpc);
     PROP(id);
     PROP(error);
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

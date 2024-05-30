@@ -1,5 +1,7 @@
 #include "GpRpcRsResultGPDesc.hpp"
-#include "../../../GpCore2/GpReflection/GpReflectManager.hpp"
+
+#include <GpCore2/GpReflection/GpReflectManager.hpp>
+#include <GpCore2/GpReflection/GpReflectPropUtils.hpp>
 
 namespace GPlatform {
 
@@ -9,11 +11,11 @@ GpRpcRsResultGPDesc::~GpRpcRsResultGPDesc (void) noexcept
 {
 }
 
-void    GpRpcRsResultGPDesc::_SReflectCollectProps (GpReflectProp::C::Vec::Val& aPropsOut)
+void    GpRpcRsResultGPDesc::_SReflectCollectProps (GpReflectProp::SmallVecVal& aPropsOut)
 {
     PROP(code);
     PROP(msg);
     PROP(items);
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

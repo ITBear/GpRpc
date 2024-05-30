@@ -1,5 +1,6 @@
 #include "GpRpcRqJsonDesc.hpp"
-#include "../../GpCore2/GpReflection/GpReflectManager.hpp"
+
+#include <GpCore2/GpReflection/GpReflectManager.hpp>
 
 namespace GPlatform {
 
@@ -9,21 +10,21 @@ GpRpcRqJsonDesc::~GpRpcRqJsonDesc (void) noexcept
 {
 }
 
-std::u8string_view  GpRpcRqJsonDesc::Method (void) const
+std::string_view    GpRpcRqJsonDesc::Method (void) const
 {
     return method;
 }
 
-void    GpRpcRqJsonDesc::SetMethod (std::u8string_view aMethod)
+void    GpRpcRqJsonDesc::SetMethod (std::string_view aMethod)
 {
     method = aMethod;
 }
 
-void    GpRpcRqJsonDesc::_SReflectCollectProps (GpReflectProp::C::Vec::Val& aPropsOut)
+void    GpRpcRqJsonDesc::_SReflectCollectProps (GpReflectProp::SmallVecVal& aPropsOut)
 {
     PROP(jsonrpc);
     PROP(id);
     PROP(method);
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

@@ -1,7 +1,9 @@
 #pragma once
 
 #include "GpRpcCoreGP_global.hpp"
-#include "../../GpCore2/GpReflection/GpReflectUtils.hpp"
+
+#include <GpCore2/GpReflection/GpReflectUtils.hpp>
+#include <GpCore2/GpReflection/GpReflectObject.hpp>
 
 namespace GPlatform {
 
@@ -9,21 +11,21 @@ class GP_RPC_CORE_GP_API GpRpcPropValidationResDesc final: public GpReflectObjec
 {
 public:
     CLASS_DD(GpRpcPropValidationResDesc)
-    REFLECT_DECLARE(u8"36371ddf-1cc6-4938-9b6b-f7c32672523b"_uuid)
+    REFLECT_DECLARE("36371ddf-1cc6-4938-9b6b-f7c32672523b"_uuid)
 
 public:
-                        GpRpcPropValidationResDesc  (void) noexcept = default;
-    inline              GpRpcPropValidationResDesc  (const GpRpcPropValidationResDesc& aDesc);
-    inline              GpRpcPropValidationResDesc  (GpRpcPropValidationResDesc&& aDesc) noexcept;
-    inline              GpRpcPropValidationResDesc  (std::u8string  aName,
-                                                     std::u8string  aError,
-                                                     const bool     aIsValid) noexcept;
-    virtual             ~GpRpcPropValidationResDesc (void) noexcept override final;
+                    GpRpcPropValidationResDesc  (void) noexcept = default;
+    inline          GpRpcPropValidationResDesc  (const GpRpcPropValidationResDesc& aDesc);
+    inline          GpRpcPropValidationResDesc  (GpRpcPropValidationResDesc&& aDesc) noexcept;
+    inline          GpRpcPropValidationResDesc  (std::string    aName,
+                                                 std::string    aError,
+                                                 const bool     aIsValid) noexcept;
+    virtual         ~GpRpcPropValidationResDesc (void) noexcept override final;
 
 public:
-    std::u8string       name;
-    std::u8string       error;
-    bool                is_valid = false;
+    std::string     name;
+    std::string     error;
+    bool            is_valid = false;
 };
 
 GpRpcPropValidationResDesc::GpRpcPropValidationResDesc (const GpRpcPropValidationResDesc& aDesc):
@@ -44,9 +46,9 @@ is_valid(std::move(aDesc.is_valid))
 
 GpRpcPropValidationResDesc::GpRpcPropValidationResDesc
 (
-    std::u8string   aName,
-    std::u8string   aError,
-    const bool      aIsValid
+    std::string aName,
+    std::string aError,
+    const bool  aIsValid
 ) noexcept:
 name    (std::move(aName)),
 error   (std::move(aError)),

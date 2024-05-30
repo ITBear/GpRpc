@@ -2,50 +2,73 @@
 
 namespace GPlatform {
 
+GpRpcMethodsManagersGroup::GpRpcMethodsManagersGroup
+(
+    GpRpcMethodsManager::SP         aApiMethodNotFoundManager,
+    GpRpcMethodNotFoundThrower::SP  aApiMethodNotFoundThrower
+) noexcept:
+iApiMethodNotFoundManager(std::move(aApiMethodNotFoundManager)),
+iApiMethodNotFoundThrower(std::move(aApiMethodNotFoundThrower))
+{
+}
+
 GpRpcMethodsManagersGroup::~GpRpcMethodsManagersGroup (void) noexcept
 {
 }
 
 void    GpRpcMethodsManagersGroup::Register (GpRpcMethodsManager::SP aApiMethodsManager)
 {
-    aApiMethodsManager.V().Init();
+    aApiMethodsManager->Init();
 
-    aApiMethodsManager.V().Factories().Process
-    ([&](auto& aElements)
-    {
-        for (auto& e: aElements)
+    aApiMethodsManager->Factories().ProcessContainer
+    (
+        [&](auto& aElements)
         {
-            iApiManagers.Set
-            (
-                std::get<0>(e),
-                std::tuple<GpRpcMethodsManager::SP, GpRpcMethodFactory::SP>{aApiMethodsManager, std::get<1>(e)}
-            );
+            for (auto&[methodName, methodFactory]: aElements)
+            {
+                iApiManagers.SetOrUpdate
+                (
+                    methodName,
+                    std::tuple<GpRpcMethodsManager::SP, GpRpcMethodFactory::SP>
+                    {
+                        aApiMethodsManager,
+                        methodFactory
+                    }
+                );
+            }
         }
-    });
+    );
 }
 
-void    GpRpcMethodsManagersGroup::RegisterEmptyMethodName (GpRpcMethodsManager::SP aApiMethodsManager)
+void    GpRpcMethodsManagersGroup::RegisterEmptyMethodNameManager (GpRpcMethodsManager::SP aApiMethodsManager)
 {
     aApiMethodsManager.V().Init();
 
-    aApiMethodsManager.V().Factories().Process
-    ([&](auto& aElements)
-    {
-        for (auto& e: aElements)
+    aApiMethodsManager.V().Factories().ProcessContainer
+    (
+        [&](auto& aElements)
         {
-            iApiManagerEmptyMethodName = std::tuple<GpRpcMethodsManager::SP, GpRpcMethodFactory::SP>{aApiMethodsManager, std::get<1>(e)};
-            break;
+            for (auto&[methodName, methodFactory]: aElements)
+            {
+                iEmptyManagerAndMethodFactory = std::tuple<GpRpcMethodsManager::SP, GpRpcMethodFactory::SP>
+                {
+                    aApiMethodsManager,
+                    methodFactory
+                };
+
+                break;
+            }
         }
-    });
+    );
 }
 
-GpRpcMethodsManagersGroup::ManagerAndMethodT    GpRpcMethodsManagersGroup::Find (const std::optional<std::u8string>& aMethodName) const
+GpRpcMethodsManagersGroup::ManagerAndMethodT    GpRpcMethodsManagersGroup::Find (std::string_view aMethodName) const
 {
-    if (aMethodName.has_value())
+    if (!aMethodName.empty())
     {
-        auto res = iApiManagers.GetOpt(aMethodName.value());
+        auto managerAndMethodFactoryOpt = iApiManagers.GetOpt(aMethodName);
 
-        if (!res.has_value())
+        if (!managerAndMethodFactoryOpt.has_value()) [[unlikely]]
         {
             return
             {
@@ -54,15 +77,19 @@ GpRpcMethodsManagersGroup::ManagerAndMethodT    GpRpcMethodsManagersGroup::Find 
             };
         }
 
-        auto& v = res.value().get();
+        auto& [manager, methodFactory] = managerAndMethodFactoryOpt.value();
 
-        return {std::get<0>(v), std::get<1>(v).V().NewInstance()};
+        return ManagerAndMethodT
+        {
+            manager,
+            methodFactory->NewInstance()
+        };
     } else
     {
-        return
+        return ManagerAndMethodT
         {
-            std::get<0>(iApiManagerEmptyMethodName),
-            std::get<1>(iApiManagerEmptyMethodName).V().NewInstance()
+            std::get<0>(iEmptyManagerAndMethodFactory),
+            std::get<1>(iEmptyManagerAndMethodFactory).V().NewInstance()
         };
     }
 }
@@ -72,15 +99,15 @@ GpRpcMethodsManager::SP GpRpcMethodsManagersGroup::MethodNotFoundManager (void)
     return iApiMethodNotFoundManager;
 }
 
-void    GpRpcMethodsManagersGroup::ThrowMethodNotFound (const std::optional<std::u8string>& aMethodName)
+void    GpRpcMethodsManagersGroup::ThrowMethodNotFound (std::string_view aMethodName)
 {
-    if (aMethodName.has_value())
+    if (!aMethodName.empty())
     {
-        iApiMethodNotFoundThrower.V().Throw(aMethodName.value());
+        iApiMethodNotFoundThrower.V().Throw(aMethodName);
     } else
     {
-        iApiMethodNotFoundThrower.V().Throw(u8"Unknown method (RQ method name is not set");
+        iApiMethodNotFoundThrower.V().Throw("Unknown method (RQ method name is not set");
     }
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

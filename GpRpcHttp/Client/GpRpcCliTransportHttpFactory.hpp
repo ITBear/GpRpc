@@ -2,8 +2,9 @@
 
 #include "../GpRpcHttp_global.hpp"
 #include "../../GpRpcCore/Client/GpRpcCliTransportFactory.hpp"
-#include "../../../GpCore2/GpReflection/Serializers/GpReflectSerializerFactory.hpp"
-#include "../../../GpNetwork/GpNetworkHttp/GpNetworkHttpCore/Client/GpHttpClientFactory.hpp"
+
+#include <GpCore2/GpReflection/Serializers/GpReflectSerializerFactory.hpp>
+#include <GpNetwork/GpNetworkHttp/GpNetworkHttpCore/Client/GpHttpClientFactory.hpp>
 
 namespace GPlatform {
 
@@ -14,41 +15,28 @@ public:
     CLASS_DD(GpRpcCliTransportHttpFactory)
 
 public:
-    inline                          GpRpcCliTransportHttpFactory    (GpReflectSerializerFactory::SP aReflectSerializerFactory,
-                                                                     GpHttpClientFactory::SP        aHttpClientFactory) noexcept;
-    inline                          GpRpcCliTransportHttpFactory    (std::u8string_view             aURL,
-                                                                     GpReflectSerializerFactory::SP aReflectSerializerFactory,
-                                                                     GpHttpClientFactory::SP        aHttpClientFactory);
+                                    GpRpcCliTransportHttpFactory    (GpReflectSerializerFactory::SP aReflectSerializerFactory,
+                                                                     GpHttpClientFactory::SP        aHttpClientFactory,
+                                                                     GpSocketFlags                  aSocketFlags,
+                                                                     GpIOEventPollerIdx             aIOEventPollerIdx,
+                                                                     milliseconds_t                 aConnectTimeout) noexcept;
+                                    GpRpcCliTransportHttpFactory    (GpReflectSerializerFactory::SP aReflectSerializerFactory,
+                                                                     GpHttpClientFactory::SP        aHttpClientFactory,
+                                                                     GpSocketFlags                  aSocketFlags,
+                                                                     GpIOEventPollerIdx             aIOEventPollerIdx,
+                                                                     milliseconds_t                 aConnectTimeout,
+                                                                     std::string                    aTaskName) noexcept;
     virtual                         ~GpRpcCliTransportHttpFactory   (void) noexcept override final;
 
     virtual GpRpcCliTransport::SP   NewInstance                     (void) const override final;
 
 private:
-    const std::u8string             iURL;
     GpReflectSerializerFactory::SP  iReflectSerializerFactory;
     GpHttpClientFactory::SP         iHttpClientFactory;
+    const GpSocketFlags             iSocketFlags;
+    const GpIOEventPollerIdx        iIOEventPollerIdx;
+    const milliseconds_t            iConnectTimeout;
+    const std::string               iTaskName;
 };
 
-GpRpcCliTransportHttpFactory::GpRpcCliTransportHttpFactory
-(
-    GpReflectSerializerFactory::SP  aReflectSerializerFactory,
-    GpHttpClientFactory::SP         aHttpClientFactory
-) noexcept:
-iReflectSerializerFactory(std::move(aReflectSerializerFactory)),
-iHttpClientFactory(std::move(aHttpClientFactory))
-{
-}
-
-GpRpcCliTransportHttpFactory::GpRpcCliTransportHttpFactory
-(
-    std::u8string_view              aURL,
-    GpReflectSerializerFactory::SP  aReflectSerializerFactory,
-    GpHttpClientFactory::SP         aHttpClientFactory
-):
-iURL(aURL),
-iReflectSerializerFactory(std::move(aReflectSerializerFactory)),
-iHttpClientFactory(std::move(aHttpClientFactory))
-{
-}
-
-}//namespace GPlatform
+}// namespace GPlatform

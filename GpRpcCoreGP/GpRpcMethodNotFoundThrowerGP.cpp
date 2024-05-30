@@ -3,7 +3,7 @@
 
 namespace GPlatform {
 
-void    GpRpcMethodNotFoundThrowerGP::Throw (std::u8string_view aMethodName) const
+void    GpRpcMethodNotFoundThrowerGP::Throw (std::string_view aMethodName) const
 {
     THROW_METHOD_NOT_FOUND_GP
     (
@@ -12,4 +12,4 @@ void    GpRpcMethodNotFoundThrowerGP::Throw (std::u8string_view aMethodName) con
     );
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

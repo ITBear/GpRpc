@@ -1,7 +1,0 @@
-
-
-class GpRpcDocGenerator
-{
-public:
-    GpRpcDocGenerator();
-};

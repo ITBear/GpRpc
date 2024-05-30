@@ -1,7 +1,19 @@
 #include "GpRpcCliTransportHttp.hpp"
-#include "../../../GpCore2/GpUtils/Streams/GpByteWriterStorageByteArray.hpp"
+
+#include <GpCore2/GpUtils/Streams/GpByteWriterStorageByteArray.hpp>
+#include <GpNetwork/GpNetworkHttp/GpNetworkHttpCore/Body/GpHttpBodyPayloadFixed.hpp>
 
 namespace GPlatform {
+
+GpRpcCliTransportHttp::GpRpcCliTransportHttp
+(
+    GpReflectSerializer::SP aSerializer,
+    GpHttpClient::SP        aHttpClient
+) noexcept:
+iSerializer{std::move(aSerializer)},
+iHttpClient{std::move(aHttpClient)}
+{
+}
 
 GpRpcCliTransportHttp::~GpRpcCliTransportHttp (void) noexcept
 {
@@ -9,6 +21,7 @@ GpRpcCliTransportHttp::~GpRpcCliTransportHttp (void) noexcept
 
 GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
 (
+    const GpUrl&                                    aUrl,
     std::optional<GpReflectObject::C::Ref::CVal>    aRq,
     const std::vector<const GpReflectModel*>&       aRsTypeStructVariants,
     std::optional<SerializeRqFnT>                   aBeforeSerializeRqFn,
@@ -19,18 +32,18 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
 {
     const GpReflectSerializer& serializer = iSerializer.V();
 
-    //RQ/RS
-    GpHttpRequest::SP   httpRq;
-    GpHttpResponse::SP  httpRs;
+    // RQ/RS
+    GpHttpResponse::SP httpRs;
 
     {
-        //Serialize RQ to body
+        // Serialize RQ to body
         GpBytesArray body;
         if (aRq.has_value())
         {
             const GpReflectObject& rqDesc = aRq.value().get();
 
-            body.resize(1024);//TODO: move to factory
+            // TODO: move to factory
+            body.resize(1024);
 
             GpByteWriterStorageByteArray    bodyStorage(body);
             GpByteWriter                    bodyWriter(bodyStorage);
@@ -51,19 +64,21 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
                 aAfterSerializeRqFn.value()(bodyWriter);
             }
 
-            bodyWriter.ShrinkToFit();
+            bodyWriter.OnEnd();
         }
 
-        //Prepate HTTP RQ
-        GpHttpHeaders rqHeaders;
-
-        httpRq = MakeSP<GpHttpRequest>
+        // Prepate HTTP RQ
+        GpHttpHeaders       rqHeaders;
+        GpHttpRequest::SP   httpRq = MakeSP<GpHttpRequest>
         (
-            GpHttpVersion::HTTP_1_1,
-            GpHttpRequestType::POST,
-            iURL,
-            rqHeaders,
-            std::move(body)
+            GpHttpRequestNoBodyDesc
+            {
+                GpHttpVersion::HTTP_1_1,
+                GpHttpRequestType::POST,
+                aUrl,
+                rqHeaders
+            },
+            MakeSP<GpHttpBodyPayloadFixed>(std::move(body))
         );
 
         if (aBeforeProcessFn.has_value())
@@ -72,8 +87,8 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
             aBeforeProcessFn.value()(rq);
         }
 
-        //Do HTTP RQ
-        httpRs = iHttpClient.V().Do(httpRq, GpHttpClient::ErorrMode::THROW_ON_NOT_200);
+        // Do HTTP RQ
+        httpRs = iHttpClient.V().DoRqAndWaitForRs(httpRq, GpHttpClient::ErorrMode::THROW_ON_NOT_200);
     }
 
     if (aAfterProcessFn.has_value())
@@ -82,8 +97,17 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
         aAfterProcessFn.value()(rs);
     }
 
-    //Deserialize RS
-    return serializer.ToObject(httpRs.V().body, aRsTypeStructVariants);
+    // Deserialize RS
+    const GpHttpBodyPayload& rsBodyPayload = httpRs.V().iBody.V();
+    THROW_COND_GP
+    (
+        rsBodyPayload.Type() == GpHttpBodyPayloadType::FIXED_SIZE,
+        "Only GpHttpBodyPayloadType::FIXED_SIZE supported"
+    );
+
+    const GpHttpBodyPayloadFixed& rsBodyPayloadFixed = static_cast<const GpHttpBodyPayloadFixed&>(rsBodyPayload);
+
+    return serializer.ToObject(rsBodyPayloadFixed.Data(), aRsTypeStructVariants);
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

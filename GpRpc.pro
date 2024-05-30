@@ -3,38 +3,28 @@ TEMPLATE = subdirs
 os_linux {
 	SUBDIRS += \
 		./GpRpcCore \
-		./GpRpcCoreJson \
 		./GpRpcCoreGP \
-		./GpRpcHttp \
-		./GpRpcUtils
+		./GpRpcHttp
 } else:os_android {
 	SUBDIRS += \
 		./GpRpcCore \
-		./GpRpcCoreJson \
 		./GpRpcCoreGP \
-		./GpRpcHttp \
-		./GpRpcUtils
+		./GpRpcHttp
 } else:os_ios {
 	SUBDIRS += \
 		./GpRpcCore \
-		./GpRpcCoreJson \
 		./GpRpcCoreGP \
-		./GpRpcHttp \
-		./GpRpcUtils
+		./GpRpcHttp
 } else:os_windows {
 	SUBDIRS += \
 		./GpRpcCore \
-		./GpRpcCoreJson \
 		./GpRpcCoreGP \
-		./GpRpcHttp \
-		./GpRpcUtils
+		./GpRpcHttp
 } else:os_macx {
 	SUBDIRS += \
 		./GpRpcCore \
-		./GpRpcCoreJson \
 		./GpRpcCoreGP \
-		./GpRpcHttp \
-		./GpRpcUtils
+		./GpRpcHttp
 } else:os_browser {
 	SUBDIRS +=
 } else {

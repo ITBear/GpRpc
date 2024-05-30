@@ -1,7 +1,8 @@
 #pragma once
 
 #include "../GpRpcCoreJson_global.hpp"
-#include "../../GpCore2/GpReflection/GpReflectUtils.hpp"
+
+#include <GpCore2/GpReflection/GpReflectUtils.hpp>
 
 namespace GPlatform {
 
@@ -9,17 +10,17 @@ class GP_RPC_CORE_JSON_API GpRpcRsResultJsonDesc final: public GpReflectObject
 {
 public:
     CLASS_DD(GpRpcRsResultJsonDesc)
-    REFLECT_DECLARE(u8"4297c2ba-8831-47c0-9247-ed50d4dcb3a7"_uuid)
+    REFLECT_DECLARE("4297c2ba-8831-47c0-9247-ed50d4dcb3a7"_uuid)
 
 public:
-                        GpRpcRsResultJsonDesc   (void) noexcept = default;
-    inline              GpRpcRsResultJsonDesc   (const GpRpcRsResultJsonDesc& aDesc);
-    inline              GpRpcRsResultJsonDesc   (GpRpcRsResultJsonDesc&& aDesc) noexcept;
-    virtual             ~GpRpcRsResultJsonDesc  (void) noexcept override final;
+                    GpRpcRsResultJsonDesc   (void) noexcept = default;
+    inline          GpRpcRsResultJsonDesc   (const GpRpcRsResultJsonDesc& aDesc);
+    inline          GpRpcRsResultJsonDesc   (GpRpcRsResultJsonDesc&& aDesc) noexcept;
+    virtual         ~GpRpcRsResultJsonDesc  (void) noexcept override final;
 
 public:
-    s_int_64            code    = 0;
-    std::u8string       message;
+    s_int_64        code    = 0;
+    std::string     message;
 };
 
 GpRpcRsResultJsonDesc::GpRpcRsResultJsonDesc (const GpRpcRsResultJsonDesc& aDesc):
@@ -36,4 +37,4 @@ message(std::move(aDesc.message))
 {
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

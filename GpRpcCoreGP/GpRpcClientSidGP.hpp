@@ -11,16 +11,16 @@ public:
     CLASS_DD(GpRpcClientSidGP)
 
 public:
-    inline                  GpRpcClientSidGP    (GpRpcCliTransport::SP aTransport) noexcept;
-    virtual                 ~GpRpcClientSidGP   (void) noexcept override;
+    inline              GpRpcClientSidGP    (GpRpcCliTransport::SP aTransport) noexcept;
+    virtual             ~GpRpcClientSidGP   (void) noexcept override;
 
-    inline void             SetSID              (std::u8string_view aSid);
+    inline void         SetSID              (std::string_view aSid);
 
 protected:
-    virtual void            OnBeforeRQ          (GpRpcRqIfDesc& aRq) override;
+    virtual void        OnBeforeRQ          (GpRpcRqIfDesc& aRq) override;
 
 private:
-    std::u8string           iSid;
+    std::string         iSid;
 };
 
 GpRpcClientSidGP::GpRpcClientSidGP (GpRpcCliTransport::SP aTransport) noexcept:
@@ -28,9 +28,9 @@ GpRpcClientGP(std::move(aTransport))
 {
 }
 
-void    GpRpcClientSidGP::SetSID (std::u8string_view aSid)
+void    GpRpcClientSidGP::SetSID (std::string_view aSid)
 {
     iSid = aSid;
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

@@ -2,7 +2,7 @@
 
 namespace GPlatform {
 
-GpRpcMethodFactory::GpRpcMethodFactory (std::u8string_view aMethodName):
+GpRpcMethodFactory::GpRpcMethodFactory (std::string_view aMethodName):
 iMethodName(aMethodName)
 {
 }
@@ -11,4 +11,4 @@ GpRpcMethodFactory::~GpRpcMethodFactory (void) noexcept
 {
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

@@ -8,4 +8,4 @@ GpRpcRsResultItemsException::~GpRpcRsResultItemsException (void) noexcept
 {
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

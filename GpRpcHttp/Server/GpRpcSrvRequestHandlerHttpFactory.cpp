@@ -3,6 +3,18 @@
 
 namespace GPlatform {
 
+GpRpcSrvRequestHandlerHttpFactory::GpRpcSrvRequestHandlerHttpFactory
+(
+    GpRpcMethodsManagersGroup::SP   aRpcManagersGroup,
+    GpReflectSerializerFactory::SP  aSerializerFactory,
+    GpRpcMethodDetectorFactory::SP  aMethodDetectorFactory
+) noexcept:
+iRpcManagersGroup     (std::move(aRpcManagersGroup)),
+iSerializerFactory    (std::move(aSerializerFactory)),
+iMethodDetectorFactory(std::move(aMethodDetectorFactory))
+{
+}
+
 GpRpcSrvRequestHandlerHttpFactory::~GpRpcSrvRequestHandlerHttpFactory (void) noexcept
 {
 }
@@ -17,4 +29,4 @@ GpHttpRequestHandler::SP    GpRpcSrvRequestHandlerHttpFactory::NewInstance (void
     );
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

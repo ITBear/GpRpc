@@ -4,7 +4,8 @@
 #include "../GpRpcCore/Client/GpRpcClient.hpp"
 #include "../GpRpcCore/RqRs/GpRpcRqIfDesc.hpp"
 #include "../GpRpcCore/RqRs/GpRpcRsIfDesc.hpp"
-#include "../../GpCore2/GpReflection/GpReflectManager.hpp"
+
+#include <GpCore2/GpReflection/GpReflectManager.hpp>
 
 namespace GPlatform {
 
@@ -25,8 +26,9 @@ public:
     virtual                         ~GpRpcClientGP  (void) noexcept {}
 
     template<typename RQ, typename RS>
-    typename RS::DataT              ProcessRQ       (const typename RQ::DataT&              aRqData,
-                                                     std::u8string_view                     aMethodName,
+    typename RS::DataT              ProcessRQ       (const GpUrl&                           aUrl,
+                                                     const typename RQ::DataT&              aRqData,
+                                                     std::string_view                       aMethodName,
                                                      std::optional<TransportSerializeRqFnT> aBeforeTransportSerializeRqFn   = std::nullopt,
                                                      std::optional<TransportSerializeRqFnT> aAfterTransportSerializeRqFn    = std::nullopt,
                                                      std::optional<TransportProcessRqRsFnT> aBeforeTransportProcessFn       = std::nullopt,
@@ -34,7 +36,7 @@ public:
 
 protected:
     virtual void                    CheckRsResult   (const GpRpcRsIfDesc&   aRsDesc,
-                                                     std::u8string_view     aMethodName);
+                                                     std::string_view       aMethodName);
     virtual void                    OnBeforeRQ      (GpRpcRqIfDesc& aRq);
 };
 
@@ -46,8 +48,9 @@ GpRpcClient(std::move(aTransport))
 template<typename RQ, typename RS>
 typename RS::DataT  GpRpcClientGP::ProcessRQ
 (
+    const GpUrl&                            aUrl,
     const typename RQ::DataT&               aRqData,
-    std::u8string_view                      aMethodName,
+    std::string_view                        aMethodName,
     std::optional<TransportSerializeRqFnT>  aBeforeTransportSerializeRqFn,
     std::optional<TransportSerializeRqFnT>  aAfterTransportSerializeRqFn,
     std::optional<TransportProcessRqRsFnT>  aBeforeTransportProcessFn,
@@ -63,11 +66,15 @@ typename RS::DataT  GpRpcClientGP::ProcessRQ
 
     OnBeforeRQ(rq);
 
-    //Do
+    // Do
     GpReflectObject::SP rsBase = _Transport().ProcessRQ
     (
+        aUrl,
         rq,
-        {&RS::SReflectModel(), &GpRpcRsIfDesc::SReflectModel()},
+        {
+            RS::SReflectModel().Pn(),
+            GpRpcRsIfDesc::SReflectModel().Pn()
+        },
         aBeforeTransportSerializeRqFn,
         aAfterTransportSerializeRqFn,
         aBeforeTransportProcessFn,
@@ -76,13 +83,13 @@ typename RS::DataT  GpRpcClientGP::ProcessRQ
 
     GpRpcRsIfDesc& rsRpc = GpReflectManager::SCastRef<GpRpcRsIfDesc>(rsBase.V());
 
-    //Check result
+    // Check result
     CheckRsResult(rsRpc, aMethodName);
 
-    //Cast type
+    // Cast type
     RS& rs = GpReflectManager::SCastRef<RS>(rsRpc);
 
     return rs.Payload().template Value<typename RS::DataTRef>();
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

@@ -42,9 +42,9 @@ GpRpcRsResultItemsException::GpRpcRsResultItemsException
     ItemT::C::Vec::SP&&     aItems,
     const SourceLocationT&  aSourceLocation
 ):
-GpException(u8"Multiple errors"_sv, aSourceLocation),
+GpException("Multiple errors", aSourceLocation),
 iItems(std::move(aItems))
 {
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

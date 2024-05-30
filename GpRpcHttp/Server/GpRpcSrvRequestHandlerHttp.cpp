@@ -1,5 +1,9 @@
 #include "GpRpcSrvRequestHandlerHttp.hpp"
 
+#include <GpNetwork/GpNetworkHttp/GpNetworkHttpCore/Body/GpHttpBodyPayloadFixed.hpp>
+#include <GpNetwork/GpNetworkHttp/GpNetworkHttpCore/RqRs/GpHttpResponseNoBodyDesc.hpp>
+#include <GpNetwork/GpNetworkHttp/GpNetworkHttpCore/Body/GpHttpBodyPayloadFixed.hpp>
+
 namespace GPlatform {
 
 GpRpcSrvRequestHandlerHttp::~GpRpcSrvRequestHandlerHttp (void) noexcept
@@ -17,28 +21,40 @@ GpHttpResponse::SP  GpRpcSrvRequestHandlerHttp::OnRequest (GpHttpRequest& aReque
 
     try
     {
-        GpBytesArray&   rqBody      = aRequest.body;
-        const size_t    rqBodySize  = rqBody.size();
+        GpHttpBodyPayload& rqBodyPayload = aRequest.iBody.V();
 
-        rqBody.resize(NumOps::SAdd<size_t>(rqBodySize, 1));
-        rqBody[rqBodySize] = 0;//null terminator
+        THROW_COND_HTTP
+        (
+            rqBodyPayload.Type() == GpHttpBodyPayloadType::FIXED_SIZE,
+            GpHttpResponseCode::BAD_REQUEST_400,
+            "Only GpHttpBodyPayloadType::FIXED_SIZE supported"
+        );
 
-        //aRequest.body.capacity();
-        //aRequest.body.size();
+        GpHttpBodyPayloadFixed& rqBodyPayloadFixed  = static_cast<GpHttpBodyPayloadFixed&>(rqBodyPayload);
+        GpSpanByteRW            rqBodyPayloadData   = rqBodyPayloadFixed.Data();
 
-        const GpSpanPtrByteRW rqBodySpan(rqBody.data(), rqBodySize);
+        THROW_COND_HTTP
+        (
+            !rqBodyPayloadData.Empty(),
+            GpHttpResponseCode::BAD_REQUEST_400,
+            "Empty body"
+        );
 
-        if (rqBodySpan.Count() == 0)
+        GpBytesArray nullTerminatedData;
+        if (rqBodyPayloadData[rqBodyPayloadData.Count() - 1] != std::byte{0})
         {
-            THROW_HTTP(GpHttpResponseCode::BAD_REQUEST_400, "Body is empty"_sv);
+            // String must be null terminated
+            nullTerminatedData.resize(rqBodyPayloadData.Count() + 1);
+            std::memcpy(std::data(nullTerminatedData), rqBodyPayloadData.Ptr(), rqBodyPayloadData.Count());
+            nullTerminatedData[std::size(nullTerminatedData) - 1] = std::byte{0};
+
+            rqBodyPayloadData = nullTerminatedData;
         }
 
-        //Detect type
-        auto methodDetector             = iMethodDetectorFactory.V().NewInstance(rqBodySpan);
-        auto [methodNameOpt, rqBodyCtx] = methodDetector.V().DetectApiMethodName();
-        auto [managerSP, methodSP]      = iRpcManagersGroup.V().Find(methodNameOpt);
-
-        const std::optional<std::u8string>& methodNameOptRef = methodNameOpt;
+        // Detect type
+        auto methodDetector             = iMethodDetectorFactory.V().NewInstance(rqBodyPayloadData);
+        auto [methodName, rqBodyCtx]    = methodDetector.V().DetectApiMethodName();
+        auto [managerSP, methodSP]      = iRpcManagersGroup.V().Find(methodName);
 
         if (   managerSP.IsNotNULL()
             && methodSP.IsNotNULL())
@@ -46,30 +62,36 @@ GpHttpResponse::SP  GpRpcSrvRequestHandlerHttp::OnRequest (GpHttpRequest& aReque
             GpRpcMethod& method = methodSP.V();
             apiMethodsManager   = managerSP;
 
-            //Deserialize RQ data
-            rq = serializer.Vn().ToObject(rqBodyCtx.V(), method.RqReflectModel()).CastAs<GpRpcRqIfDesc::SP>();
+            // Deserialize RQ data
+            rq = serializer.Vn().ToObject(rqBodyCtx.V(), method.RqReflectModel().Vn()).CastAs<GpRpcRqIfDesc::SP>();
 
-            //Call method
-            auto result = apiMethodsManager.V().CallAndCatch([&](){rs = method.Process(rq.Vn());});
+            // Call method
+            GpReflectObject::SP result = apiMethodsManager.V().CallAndCatch
+            (
+                [&]()
+                {
+                    rs = method.Process(rq.Vn());
+                }
+            );
 
             if (rs.IsNULL())
             {
-                rs = method.RsReflectModel().NewInstance().CastAs<GpRpcRsIfDesc::SP>();
+                rs = method.RsReflectModel().Vn().NewInstance().CastAs<GpRpcRsIfDesc::SP>();
             }
 
             rs.V().SetResult(result);
         } else
         {
-            apiMethodsManager = iRpcManagersGroup.V().MethodNotFoundManager();
-
-            rs = apiMethodsManager.V().NewDefaultRs();
-            auto result = apiMethodsManager.V().CallAndCatch
+            apiMethodsManager   = iRpcManagersGroup.V().MethodNotFoundManager();
+            rs                  = apiMethodsManager.V().NewDefaultRs();
+            auto result         = apiMethodsManager.V().CallAndCatch
             (
                 [&]()
                 {
-                    iRpcManagersGroup.V().ThrowMethodNotFound(methodNameOptRef);
+                    iRpcManagersGroup.V().ThrowMethodNotFound(methodName);
                 }
             );
+
             rs.V().SetResult(result);
         }
     } catch (const GpHttpException&)
@@ -93,24 +115,28 @@ GpHttpResponse::SP  GpRpcSrvRequestHandlerHttp::OnRequest (GpHttpRequest& aReque
         rs.V().SetResult(apiMethodsManager.V().GenResultExUnknown());
     }
 
-    //Serialize RS data
+    // Serialize RS data
     GpBytesArray rsBody = serializer.Vn().FromObject(rs.V());
 
-    //TODO: move to config
+    // TODO: move to config
     GpHttpHeaders headers;
     headers
         .SetContentType(GpHttpContentType::APPLICATION_JSON, GpHttpCharset::UTF_8)
         .SetConnection(GpHttpConnectionFlag::KEEP_ALIVE)
-        .SetCacheControl(GpHttpCacheControl::NO_STORE);
+        .SetCacheControl(GpHttpCacheControl::NO_STORE)
+        .SetContentLength(std::size(rsBody));
 
     GpHttpResponse::SP httpRs = MakeSP<GpHttpResponse>
     (
-        GpHttpResponseCode::OK_200,
-        std::move(headers),
-        std::move(rsBody)
+        GpHttpResponseNoBodyDesc
+        {
+            GpHttpResponseCode::OK_200,
+            std::move(headers)
+        },
+        MakeSP<GpHttpBodyPayloadFixed>(std::move(rsBody))
     );
 
     return httpRs;
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

@@ -1,8 +1,9 @@
 #pragma once
 
 #include "../GpRpcCore_global.hpp"
-#include "../../../GpCore2/GpUtils/Macro/GpMacroClass.hpp"
-#include "../../../GpCore2/GpUtils/Types/Containers/GpContainersT.hpp"
+
+#include <GpCore2/GpUtils/Macro/GpMacroClass.hpp>
+#include <GpCore2/GpUtils/Types/Containers/GpContainersT.hpp>
 
 namespace GPlatform {
 
@@ -13,12 +14,12 @@ public:
     CLASS_DD(GpRpcMethodNotFoundThrower)
 
 protected:
-                                GpRpcMethodNotFoundThrower  (void) noexcept = default;
+                        GpRpcMethodNotFoundThrower  (void) noexcept = default;
 
 public:
-    virtual                     ~GpRpcMethodNotFoundThrower (void) noexcept = default;
+    virtual             ~GpRpcMethodNotFoundThrower (void) noexcept = default;
 
-    virtual void                Throw                       (std::u8string_view aMethodName) const = 0;
+    virtual void        Throw                       (std::string_view aMethodName) const = 0;
 };
 
-}//namespace GPlatform
+}// namespace GPlatform

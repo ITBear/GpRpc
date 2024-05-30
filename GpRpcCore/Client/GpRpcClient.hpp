@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GpRpcCliTransportFactory.hpp"
+#include "GpRpcCliTransport.hpp"
 
 namespace GPlatform {
 
@@ -11,18 +11,18 @@ public:
     CLASS_DD(GpRpcClient)
 
 protected:
-    inline                          GpRpcClient     (GpRpcCliTransport::SP aTransport) noexcept;
+    inline                  GpRpcClient     (GpRpcCliTransport::SP aTransport) noexcept;
 
 public:
-    virtual                         ~GpRpcClient    (void) noexcept {}
+    virtual                 ~GpRpcClient    (void) noexcept {}
 
-    GpRpcCliTransport::SP           Transport       (void) noexcept {return iTransport;}
+    GpRpcCliTransport::SP   Transport       (void) noexcept {return iTransport;}
 
 protected:
-    GpRpcCliTransport&              _Transport      (void) noexcept {return iTransport.Vn();}
+    GpRpcCliTransport&      _Transport      (void) noexcept {return iTransport.Vn();}
 
 private:
-    GpRpcCliTransport::SP           iTransport;
+    GpRpcCliTransport::SP   iTransport;
 };
 
 GpRpcClient::GpRpcClient (GpRpcCliTransport::SP aTransport) noexcept:
@@ -30,4 +30,4 @@ iTransport(std::move(aTransport))
 {
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

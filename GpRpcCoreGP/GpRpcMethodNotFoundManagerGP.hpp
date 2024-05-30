@@ -20,4 +20,4 @@ protected:
     virtual void                    OnInit                          (void) override final;
 };
 
-}//namespace GPlatform
+}// namespace GPlatform

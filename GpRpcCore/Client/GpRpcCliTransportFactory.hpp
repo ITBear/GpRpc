@@ -19,4 +19,4 @@ public:
     virtual GpRpcCliTransport::SP   NewInstance                 (void) const = 0;
 };
 
-}//namespace GPlatform
+}// namespace GPlatform

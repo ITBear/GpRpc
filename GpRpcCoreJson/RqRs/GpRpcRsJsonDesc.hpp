@@ -2,7 +2,8 @@
 
 #include "GpRpcRsResultJsonDesc.hpp"
 #include "../../GpRpcCore/RqRs/GpRpcRsIfDesc.hpp"
-#include "../../../GpCore2/GpUtils/TypeTraits/GpTypeInfoUtils.hpp"
+
+#include <GpCore2/GpUtils/TypeTraits/GpTypeInfoUtils.hpp>
 
 namespace GPlatform {
 
@@ -10,7 +11,7 @@ class GP_RPC_CORE_JSON_API GpRpcRsJsonDesc: public GpRpcRsIfDesc
 {
 public:
     CLASS_DD(GpRpcRsJsonDesc)
-    REFLECT_DECLARE(u8"2b335342-83fd-48f5-8427-6787f794d156"_uuid)
+    REFLECT_DECLARE("2b335342-83fd-48f5-8427-6787f794d156"_uuid)
 
 public:
     inline                          GpRpcRsJsonDesc     (void) noexcept;
@@ -23,7 +24,7 @@ public:
     virtual void                    SetResult           (GpReflectObject::SP aResult) override final;
 
 public:
-    std::u8string                   jsonrpc = u8"2.0";
+    std::string                     jsonrpc = "2.0";
     s_int_64                        id      = 1;
     GpRpcRsResultJsonDesc::SP       error;
 };
@@ -120,13 +121,13 @@ void    NAME##_rs::SetPayload (GpAny& aAny) \
         result = aAny.ValueNoCheck<DataTRefC>(aAny); \
     } else \
     { \
-        THROW_GP(u8"Unsupported payload type"_sv); \
+        THROW_GP("Unsupported payload type"); \
     } \
 } \
- \
-void    NAME##_rs::_SReflectCollectProps (GpReflectProp::C::Vec::Val& aPropsOut) \
+ \  
+void    NAME##_rs::_SReflectCollectProps (GpReflectProp::SmallVecVal& aPropsOut) \
 { \
     PROP(result); \
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

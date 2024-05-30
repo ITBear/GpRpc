@@ -1,5 +1,5 @@
 #include "GpRpcClientSidGP.hpp"
-#include "RqRs/GpRpcRqRsGP.hpp"
+#include "RqRs/GpRpcRqGPDesc.hpp"
 
 namespace GPlatform {
 
@@ -15,4 +15,4 @@ void    GpRpcClientSidGP::OnBeforeRQ (GPlatform::GpRpcRqIfDesc& aRq)
     rq.sid  = iSid;
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

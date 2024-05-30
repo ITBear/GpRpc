@@ -1,10 +1,11 @@
 #pragma once
 
 #include "../GpRpcHttp_global.hpp"
-#include "../../../GpNetwork/GpNetworkHttp/GpNetworkHttpCore/RqRs/GpHttpRequestHandlerFactory.hpp"
-#include "../../../GpCore2/GpReflection/Serializers/GpReflectSerializerFactory.hpp"
 #include "../../GpRpcCore/Server/GpRpcMethodsManagersGroup.hpp"
 #include "../../GpRpcCore/Server/GpRpcMethodDetectorFactory.hpp"
+
+#include <GpNetwork/GpNetworkHttp/GpNetworkHttpCore/RequestHandlers/GpHttpRequestHandlerFactory.hpp>
+#include <GpCore2/GpReflection/Serializers/GpReflectSerializerFactory.hpp>
 
 namespace GPlatform {
 
@@ -15,7 +16,7 @@ public:
     CLASS_DD(GpRpcSrvRequestHandlerHttpFactory)
 
 public:
-    inline                              GpRpcSrvRequestHandlerHttpFactory   (GpRpcMethodsManagersGroup::SP  aRpcManagersGroup,
+                                        GpRpcSrvRequestHandlerHttpFactory   (GpRpcMethodsManagersGroup::SP  aRpcManagersGroup,
                                                                              GpReflectSerializerFactory::SP aSerializerFactory,
                                                                              GpRpcMethodDetectorFactory::SP aMethodDetectorFactory) noexcept;
     virtual                             ~GpRpcSrvRequestHandlerHttpFactory  (void) noexcept override final;
@@ -28,16 +29,4 @@ private:
     GpRpcMethodDetectorFactory::SP      iMethodDetectorFactory;
 };
 
-GpRpcSrvRequestHandlerHttpFactory::GpRpcSrvRequestHandlerHttpFactory
-(
-    GpRpcMethodsManagersGroup::SP   aRpcManagersGroup,
-    GpReflectSerializerFactory::SP  aSerializerFactory,
-    GpRpcMethodDetectorFactory::SP  aMethodDetectorFactory
-) noexcept:
-iRpcManagersGroup     (std::move(aRpcManagersGroup)),
-iSerializerFactory    (std::move(aSerializerFactory)),
-iMethodDetectorFactory(std::move(aMethodDetectorFactory))
-{
-}
-
-}//namespace GPlatform
+}// namespace GPlatform

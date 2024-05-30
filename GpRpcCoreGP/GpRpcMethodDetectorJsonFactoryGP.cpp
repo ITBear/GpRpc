@@ -11,9 +11,9 @@ GpRpcMethodDetectorJsonFactoryGP::~GpRpcMethodDetectorJsonFactoryGP (void) noexc
 {
 }
 
-GpRpcMethodDetector::SP GpRpcMethodDetectorJsonFactoryGP::NewInstance (GpSpanPtrCharRW aData) const
+GpRpcMethodDetector::SP GpRpcMethodDetectorJsonFactoryGP::NewInstance (GpSpanCharRW aData) const
 {
     return MakeSP<GpRpcMethodDetectorJsonGP>(std::move(aData));
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

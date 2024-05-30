@@ -11,15 +11,15 @@ public:
     CLASS_DD(GpRpcMethodFactory)
 
 public:
-                                GpRpcMethodFactory  (std::u8string_view aMethodName);
+                                GpRpcMethodFactory  (std::string_view aMethodName);
     virtual                     ~GpRpcMethodFactory (void) noexcept;
 
-    std::u8string_view          MethodName          (void) const noexcept {return iMethodName;}
+    std::string_view            MethodName          (void) const noexcept {return iMethodName;}
 
     virtual GpRpcMethod::SP     NewInstance         (void) const = 0;
 
 private:
-    const std::u8string         iMethodName;
+    const std::string           iMethodName;
 };
 
-}//namespace GPlatform
+}// namespace GPlatform

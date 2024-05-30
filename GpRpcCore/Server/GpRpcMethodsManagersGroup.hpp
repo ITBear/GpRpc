@@ -11,37 +11,29 @@ public:
     CLASS_REMOVE_CTRS_DEFAULT_MOVE_COPY(GpRpcMethodsManagersGroup)
     CLASS_DD(GpRpcMethodsManagersGroup)
 
-    using ManagerAndMethodT = std::tuple<GpRpcMethodsManager::SP, GpRpcMethod::SP>;
-    using ApiManagerT       = std::tuple<GpRpcMethodsManager::SP, GpRpcMethodFactory::SP>;
-    using ApiManagersT      = GpDictionary<std::u8string, ApiManagerT>;
+    TAG_SET(THREAD_SAFE)
+
+    using ManagerAndMethodT         = std::tuple<GpRpcMethodsManager::SP, GpRpcMethod::SP>;
+    using ManagerAndMethodFactoryT  = std::tuple<GpRpcMethodsManager::SP, GpRpcMethodFactory::SP>;
+    using ApiManagersT              = GpDictionary<boost::container::flat_map<std::string/*method name*/, ManagerAndMethodFactoryT, std::less<>>>;
 
 public:
-    inline                          GpRpcMethodsManagersGroup   (GpRpcMethodsManager::SP        aApiMethodNotFoundManager,
-                                                                 GpRpcMethodNotFoundThrower::SP aApiMethodNotFoundThrower) noexcept;
-    virtual                         ~GpRpcMethodsManagersGroup  (void) noexcept;
+                                    GpRpcMethodsManagersGroup       (GpRpcMethodsManager::SP        aApiMethodNotFoundManager,
+                                                                     GpRpcMethodNotFoundThrower::SP aApiMethodNotFoundThrower) noexcept;
+    virtual                         ~GpRpcMethodsManagersGroup      (void) noexcept;
 
-    void                            Register                    (GpRpcMethodsManager::SP aApiMethodsManager);
-    void                            RegisterEmptyMethodName     (GpRpcMethodsManager::SP aApiMethodsManager);
-    ManagerAndMethodT               Find                        (const std::optional<std::u8string>& aMethodName) const;
+    void                            Register                        (GpRpcMethodsManager::SP aApiMethodsManager);
+    void                            RegisterEmptyMethodNameManager  (GpRpcMethodsManager::SP aApiMethodsManager);
+    ManagerAndMethodT               Find                            (std::string_view aMethodName) const;
 
-    GpRpcMethodsManager::SP         MethodNotFoundManager       (void);
-    void                            ThrowMethodNotFound         (const std::optional<std::u8string>& aMethodName);
+    GpRpcMethodsManager::SP         MethodNotFoundManager           (void);
+    void                            ThrowMethodNotFound             (std::string_view aMethodName);
 
 private:
     GpRpcMethodsManager::SP         iApiMethodNotFoundManager;
     GpRpcMethodNotFoundThrower::SP  iApiMethodNotFoundThrower;
     ApiManagersT                    iApiManagers;
-    ApiManagerT                     iApiManagerEmptyMethodName;
+    ManagerAndMethodFactoryT        iEmptyManagerAndMethodFactory;
 };
 
-GpRpcMethodsManagersGroup::GpRpcMethodsManagersGroup
-(
-    GpRpcMethodsManager::SP         aApiMethodNotFoundManager,
-    GpRpcMethodNotFoundThrower::SP  aApiMethodNotFoundThrower
-) noexcept:
-iApiMethodNotFoundManager(std::move(aApiMethodNotFoundManager)),
-iApiMethodNotFoundThrower(std::move(aApiMethodNotFoundThrower))
-{
-}
-
-}//namespace GPlatform
+}// namespace GPlatform

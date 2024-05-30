@@ -2,8 +2,9 @@
 
 #include "GpRpcCoreGP_global.hpp"
 #include "../GpRpcCore/Server/GpRpcMethodNotFoundThrower.hpp"
-#include "../../GpCore2/GpUtils/Macro/GpMacroClass.hpp"
-#include "../../GpCore2/GpUtils/Types/Containers/GpContainersT.hpp"
+
+#include <GpCore2/GpUtils/Macro/GpMacroClass.hpp>
+#include <GpCore2/GpUtils/Types/Containers/GpContainersT.hpp>
 
 namespace GPlatform {
 
@@ -17,7 +18,7 @@ public:
                                 GpRpcMethodNotFoundThrowerGP    (void) noexcept = default;
     virtual                     ~GpRpcMethodNotFoundThrowerGP   (void) noexcept override final = default;
 
-    virtual void                Throw                           (std::u8string_view aMethodName) const override final;
+    virtual void                Throw                           (std::string_view aMethodName) const override final;
 };
 
-}//namespace GPlatform
+}// namespace GPlatform

@@ -28,7 +28,7 @@ void    GpRpcRsResultItemsManager::Add (GpReflectObject::SP aItem)
 
 size_t  GpRpcRsResultItemsManager::ItemsCount (void) const noexcept
 {
-    return items.size();
+    return std::size(items);
 }
 
 void    GpRpcRsResultItemsManager::Throw (const SourceLocationT& aSourceLocation)
@@ -36,4 +36,4 @@ void    GpRpcRsResultItemsManager::Throw (const SourceLocationT& aSourceLocation
     throw GpRpcRsResultItemsException(std::move(items), aSourceLocation);
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

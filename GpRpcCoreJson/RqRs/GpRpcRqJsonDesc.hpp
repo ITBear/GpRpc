@@ -1,9 +1,11 @@
 #pragma once
 
 #include "../GpRpcCoreJson_global.hpp"
-#include "../../GpCore2/GpReflection/GpReflectUtils.hpp"
+
+#include <GpCore2/GpReflection/GpReflectUtils.hpp>
+#include <GpCore2/GpUtils/TypeTraits/GpTypeInfoUtils.hpp>
+
 #include "../../GpRpcCore/RqRs/GpRpcRqIfDesc.hpp"
-#include "../../../GpCore2/GpUtils/TypeTraits/GpTypeInfoUtils.hpp"
 
 namespace GPlatform {
 
@@ -11,7 +13,7 @@ class GP_RPC_CORE_JSON_API GpRpcRqJsonDesc: public GpRpcRqIfDesc
 {
 public:
     CLASS_DD(GpRpcRqJsonDesc)
-    REFLECT_DECLARE(u8"b127a692-821c-4019-91c8-416ee7e2963a"_uuid)
+    REFLECT_DECLARE("b127a692-821c-4019-91c8-416ee7e2963a"_uuid)
 
 public:
     inline                      GpRpcRqJsonDesc     (void) noexcept;
@@ -19,13 +21,13 @@ public:
     inline explicit             GpRpcRqJsonDesc     (GpRpcRqJsonDesc&& aDesc) noexcept;
     virtual                     ~GpRpcRqJsonDesc    (void) noexcept override;
 
-    virtual std::u8string_view  Method              (void) const override final;
-    virtual void                SetMethod           (std::u8string_view aMethod) override final;
+    virtual std::string_view    Method              (void) const override final;
+    virtual void                SetMethod           (std::string_view aMethod) override final;
 
 public:
-    std::u8string               jsonrpc = u8"2.0";
+    std::string                 jsonrpc = "2.0";
     s_int_64                    id      = 1;
-    std::u8string               method;
+    std::string                 method;
 };
 
 GpRpcRqJsonDesc::GpRpcRqJsonDesc (void) noexcept
@@ -126,13 +128,13 @@ void    NAME##_rq::SetPayload (GpAny& aAny) \
        params = aAny.ValueNoCheck<DataTRefC>(); \
    } else \
    { \
-       THROW_GP(u8"Unsupported payload type"_sv); \
+       THROW_GP("Unsupported payload type"); \
    } \
 } \
- \
-void    NAME##_rq::_SReflectCollectProps (GpReflectProp::C::Vec::Val& aPropsOut) \
+ \  
+void    NAME##_rq::_SReflectCollectProps (GpReflectProp::SmallVecVal& aPropsOut) \
 { \
     PROP_F(params, (GpReflectPropFlags{GpReflectPropFlags::value_type{GpReflectPropFlag::AS_TUPLE, ""_sv}})); \
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

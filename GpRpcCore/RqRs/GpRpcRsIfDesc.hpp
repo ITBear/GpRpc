@@ -1,10 +1,11 @@
 #pragma once
 
 #include "../GpRpcCore_global.hpp"
-#include "../../../GpCore2/GpUtils/Macro/GpMacroClass.hpp"
-#include "../../../GpCore2/GpUtils/Types/Containers/GpContainersT.hpp"
-#include "../../../GpCore2/GpUtils/Types/Containers/GpAny.hpp"
-#include "../../../GpCore2/GpReflection/GpReflectObject.hpp"
+
+#include <GpCore2/GpUtils/Macro/GpMacroClass.hpp>
+#include <GpCore2/GpUtils/Types/Containers/GpContainersT.hpp>
+#include <GpCore2/GpUtils/Types/Containers/GpAny.hpp>
+#include <GpCore2/GpReflection/GpReflectObject.hpp>
 
 namespace GPlatform {
 
@@ -12,7 +13,7 @@ class GP_RPC_CORE_API GpRpcRsIfDesc: public GpReflectObject
 {
 public:
     CLASS_DD(GpRpcRsIfDesc)
-    REFLECT_DECLARE(u8"d8485e07-ef56-4315-aa0e-763ce6ff5895"_uuid)
+    REFLECT_DECLARE("d8485e07-ef56-4315-aa0e-763ce6ff5895"_uuid)
 
 public:
                                     GpRpcRsIfDesc   (void) noexcept {}
@@ -26,7 +27,7 @@ public:
 
     virtual GpAny                   Payload         (void) const;
     virtual GpAny                   Payload         (void);
-    virtual void                    SetPayload      (GpAny& aAny);
+    virtual void                    SetPayload      (GpAny& aPayload);
 };
 
-}//namespace GPlatform
+}// namespace GPlatform

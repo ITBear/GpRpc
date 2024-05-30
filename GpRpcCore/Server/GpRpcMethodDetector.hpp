@@ -1,7 +1,6 @@
 #pragma once
 
-#include "GpRpcMethod.hpp"
-#include "../../../GpCore2/GpReflection/Serializers/GpReflectSerializerCtx.hpp"
+#include <GpCore2/GpReflection/Serializers/GpReflectSerializerCtx.hpp>
 
 namespace GPlatform {
 
@@ -11,13 +10,13 @@ public:
     CLASS_REMOVE_CTRS_MOVE_COPY(GpRpcMethodDetector)
     CLASS_DD(GpRpcMethodDetector)
 
-    using ResT = std::tuple<std::optional<std::u8string>, GpReflectSerializerCtx::SP>;
+    using ResT = std::tuple<std::string, GpReflectSerializerCtx::SP>;
 
 public:
-                        GpRpcMethodDetector     (void) noexcept {}
-    virtual             ~GpRpcMethodDetector    (void) noexcept {}
+                        GpRpcMethodDetector     (void) noexcept = default;
+    virtual             ~GpRpcMethodDetector    (void) noexcept = default;
 
     virtual ResT        DetectApiMethodName     (void) const = 0;
 };
 
-}//namespace GPlatform
+}// namespace GPlatform

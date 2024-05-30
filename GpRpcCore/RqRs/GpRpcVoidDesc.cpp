@@ -1,6 +1,7 @@
 #include "GpRpcVoidDesc.hpp"
-#include "../../../GpCore2/GpReflection/GpReflectManager.hpp"
-#include "../../../GpCore2/GpReflection/GpReflectUtils.hpp"
+
+#include <GpCore2/GpReflection/GpReflectManager.hpp>
+#include <GpCore2/GpReflection/GpReflectUtils.hpp>
 
 namespace GPlatform {
 
@@ -10,8 +11,8 @@ GpRpcVoidDesc::~GpRpcVoidDesc (void) noexcept
 {
 }
 
-void    GpRpcVoidDesc::_SReflectCollectProps (GpReflectProp::C::Vec::Val& /*aPropsOut*/)
+void    GpRpcVoidDesc::_SReflectCollectProps ([[maybe_unused]] GpReflectProp::SmallVecVal& aPropsOut)
 {
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

@@ -1,5 +1,7 @@
 #include "GpRpcRqGPDesc.hpp"
-#include "../../../GpCore2/GpReflection/GpReflectManager.hpp"
+
+#include <GpCore2/GpReflection/GpReflectManager.hpp>
+#include <GpCore2/GpReflection/GpReflectPropUtils.hpp>
 
 namespace GPlatform {
 
@@ -9,20 +11,20 @@ GpRpcRqGPDesc::~GpRpcRqGPDesc (void) noexcept
 {
 }
 
-std::u8string_view  GpRpcRqGPDesc::Method (void) const
+std::string_view    GpRpcRqGPDesc::Method (void) const
 {
     return method;
 }
 
-void    GpRpcRqGPDesc::SetMethod (std::u8string_view aMethod)
+void    GpRpcRqGPDesc::SetMethod (std::string_view aMethod)
 {
     method = aMethod;
 }
 
-void    GpRpcRqGPDesc::_SReflectCollectProps (GpReflectProp::C::Vec::Val& aPropsOut)
+void    GpRpcRqGPDesc::_SReflectCollectProps (GpReflectProp::SmallVecVal& aPropsOut)
 {
     PROP(method);
     PROP(sid);
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

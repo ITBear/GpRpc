@@ -2,8 +2,9 @@
 
 #include "../GpRpcCoreGP_global.hpp"
 #include "../../GpRpcCore/RqRs/GpRpcRqIfDesc.hpp"
-#include "../../../GpCore2/GpReflection/GpReflectUtils.hpp"
-#include "../../../GpCore2/GpUtils/TypeTraits/GpTypeInfoUtils.hpp"
+
+#include <GpCore2/GpReflection/GpReflectUtils.hpp>
+#include <GpCore2/GpUtils/TypeTraits/GpTypeInfoUtils.hpp>
 
 namespace GPlatform {
 
@@ -11,7 +12,7 @@ class GP_RPC_CORE_GP_API GpRpcRqGPDesc: public GpRpcRqIfDesc
 {
 public:
     CLASS_DD(GpRpcRqGPDesc)
-    REFLECT_DECLARE(u8"e30c3a62-e95e-496a-abe2-370ff474aeca"_uuid)
+    REFLECT_DECLARE("e30c3a62-e95e-496a-abe2-370ff474aeca"_uuid)
 
 public:
     inline                      GpRpcRqGPDesc   (void) noexcept;
@@ -19,12 +20,12 @@ public:
     inline explicit             GpRpcRqGPDesc   (GpRpcRqGPDesc&& aDesc) noexcept;
     virtual                     ~GpRpcRqGPDesc  (void) noexcept override;
 
-    virtual std::u8string_view  Method          (void) const override final;
-    virtual void                SetMethod       (std::u8string_view aMethod) override final;
+    virtual std::string_view    Method          (void) const override final;
+    virtual void                SetMethod       (std::string_view aMethod) override final;
 
 public:
-    std::u8string               method;
-    std::u8string               sid;    //TODO: make optional
+    std::string                 method;
+    std::string                 sid;    //TODO: make optional
 };
 
 GpRpcRqGPDesc::GpRpcRqGPDesc (void) noexcept
@@ -54,7 +55,7 @@ public: \
  \
 public: \
  \
-    using DataT     = NAME##_rq_data; \
+    using DataT     = typename NAME##_rq_data::SP; \
     using DataTRef  = std::reference_wrapper<DataT>; \
     using DataTRefC = std::reference_wrapper<const DataT>; \
  \
@@ -123,11 +124,11 @@ void    NAME##_rq::SetPayload (GpAny& aAny) \
         data = aAny.ValueNoCheck<DataTRefC>(); \
    } else \
    { \
-        THROW_GP(u8"Unsupported payload type"_sv); \
+        THROW_GP("Unsupported payload type"); \
    } \
 } \
  \
-void    NAME##_rq::_SReflectCollectProps (GpReflectProp::C::Vec::Val& aPropsOut) \
+void    NAME##_rq::_SReflectCollectProps (GpReflectProp::SmallVecVal& aPropsOut) \
 { \
     PROP(data); \
 }

@@ -1,5 +1,6 @@
 #include "GpRpcRsResultJsonDesc.hpp"
-#include "../../GpCore2/GpReflection/GpReflectManager.hpp"
+
+#include <GpCore2/GpReflection/GpReflectManager.hpp>
 
 namespace GPlatform {
 
@@ -9,10 +10,10 @@ GpRpcRsResultJsonDesc::~GpRpcRsResultJsonDesc (void) noexcept
 {
 }
 
-void    GpRpcRsResultJsonDesc::_SReflectCollectProps (GpReflectProp::C::Vec::Val& aPropsOut)
+void    GpRpcRsResultJsonDesc::_SReflectCollectProps ([[maybe_unused]] GpReflectProp::SmallVecVal& aPropsOut)
 {
     PROP(code);
     PROP(message);
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

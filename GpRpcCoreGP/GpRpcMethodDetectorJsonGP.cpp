@@ -12,9 +12,15 @@ GpRpcMethodDetector::ResT   GpRpcMethodDetectorJsonGP::DetectApiMethodName (void
     GpJsonSerializerCtx::SP rqCtxSP = MakeSP<GpJsonSerializerCtx>();
     GpJsonSerializerCtx&    rqCtx   = rqCtxSP.Vn();
 
-    rqCtx.Init(iJsonStr);
+    rqCtx.Parse(iJsonStr);
 
-    return {rqCtx.FindMemberStr(u8"method"), rqCtxSP};
+    const auto methodOpt = rqCtx.FindMemberStr("method");
+
+    return
+    {
+        methodOpt.has_value() ? methodOpt.value() : "",
+        rqCtxSP
+    };
 }
 
-}//namespace GPlatform
+}// namespace GPlatform

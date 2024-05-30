@@ -1,7 +1,8 @@
 #pragma once
 
 #include "GpRpcMethodNotFoundExceptionCodeGP.hpp"
-#include "../../GpCore2/GpUtils/Exceptions/GpExceptionCode.hpp"
+
+#include <GpCore2/GpUtils/Exceptions/GpExceptionCode.hpp>
 
 namespace GPlatform {
 
@@ -9,4 +10,4 @@ using GpRpcMethodNotFoundExceptionGPCode = GpRpcMethodNotFoundExceptionCodeGP;
 
 EXCEPTION_CODE(, GpRpcMethodNotFoundExceptionGP, METHOD_NOT_FOUND_GP)
 
-}//namespace GPlatform
+}// namespace GPlatform

@@ -1,13 +1,12 @@
 #pragma once
 
-#include "GpRpcCoreGP_global.hpp"
-#include "../../GpCore2/GpUtils/Types/Enums/GpEnum.hpp"
-#include "../../GpCore2/GpUtils/Types/Strings/GpStringOps.hpp"
+#include <GpCore2/GpUtils/Types/Enums/GpEnum.hpp>
+#include <GpCore2/GpUtils/Types/Strings/GpStringOps.hpp>
 
 namespace GPlatform {
 
 GP_ENUM(, GpRpcMethodNotFoundExceptionCodeGP,
-    METHOD_NOT_FOUND        //Method not found
+    METHOD_NOT_FOUND        // Method not found
 );
 
-}//namespace GPlatform
+}// namespace GPlatform
