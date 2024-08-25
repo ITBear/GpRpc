@@ -1,39 +1,21 @@
-#include "GpRpcCliTransportHttpFactory.hpp"
-#include "GpRpcCliTransportHttp.hpp"
+#include <GpRpc/GpRpcHttp/Client/GpRpcCliTransportHttpFactory.hpp>
+#include <GpRpc/GpRpcHttp/Client/GpRpcCliTransportHttp.hpp>
 
 namespace GPlatform {
 
 GpRpcCliTransportHttpFactory::GpRpcCliTransportHttpFactory
 (
     GpReflectSerializerFactory::SP  aReflectSerializerFactory,
-    GpHttpClientFactory::SP         aHttpClientFactory,
-    const GpSocketFlags             aSocketFlags,
-    const GpIOEventPollerIdx        aIOEventPollerIdx,
-    const milliseconds_t            aConnectTimeout
-) noexcept:
-iReflectSerializerFactory{std::move(aReflectSerializerFactory)},
-iHttpClientFactory       {std::move(aHttpClientFactory)},
-iSocketFlags             {aSocketFlags},
-iIOEventPollerIdx        {aIOEventPollerIdx},
-iConnectTimeout          {aConnectTimeout}
-{
-}
-
-GpRpcCliTransportHttpFactory::GpRpcCliTransportHttpFactory
-(
-    GpReflectSerializerFactory::SP  aReflectSerializerFactory,
-    GpHttpClientFactory::SP         aHttpClientFactory,
     const GpSocketFlags             aSocketFlags,
     const GpIOEventPollerIdx        aIOEventPollerIdx,
     const milliseconds_t            aConnectTimeout,
-    std::string                     aTaskName
+    const milliseconds_t            aRequestTimeout
 ) noexcept:
 iReflectSerializerFactory{std::move(aReflectSerializerFactory)},
-iHttpClientFactory       {std::move(aHttpClientFactory)},
 iSocketFlags             {aSocketFlags},
 iIOEventPollerIdx        {aIOEventPollerIdx},
 iConnectTimeout          {aConnectTimeout},
-iTaskName                {std::move(aTaskName)}
+iRequestTimeout          {aRequestTimeout}
 {
 }
 
@@ -45,14 +27,11 @@ GpRpcCliTransport::SP   GpRpcCliTransportHttpFactory::NewInstance (void) const
 {
     return MakeSP<GpRpcCliTransportHttp>
     (
-        iReflectSerializerFactory.V().NewInstance(),
-        iHttpClientFactory.V().NewInstance
-        (
-            iSocketFlags,
-            iIOEventPollerIdx,
-            iConnectTimeout,
-            iTaskName
-        )
+        iReflectSerializerFactory.Vn().NewInstance(),
+        iSocketFlags,
+        iIOEventPollerIdx,
+        iConnectTimeout,
+        iRequestTimeout
     );
 }
 

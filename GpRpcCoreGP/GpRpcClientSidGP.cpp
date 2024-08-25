@@ -1,5 +1,5 @@
-#include "GpRpcClientSidGP.hpp"
-#include "RqRs/GpRpcRqGPDesc.hpp"
+#include <GpRpc/GpRpcCoreGP/GpRpcClientSidGP.hpp>
+#include <GpRpc/GpRpcCoreGP/RqRs/GpRpcRqGPDesc.hpp>
 
 namespace GPlatform {
 

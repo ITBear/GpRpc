@@ -1,7 +1,7 @@
 #pragma once
 
-#include "GpRpcMethodsManager.hpp"
-#include "GpRpcMethodNotFoundThrower.hpp"
+#include <GpRpc/GpRpcCore/Server/GpRpcMethodsManager.hpp>
+#include <GpRpc/GpRpcCore/Server/GpRpcMethodNotFoundThrower.hpp>
 
 namespace GPlatform {
 

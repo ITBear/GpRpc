@@ -1,5 +1,5 @@
-#include "GpRpcMethodNotFoundThrowerGP.hpp"
-#include "GpRpcMethodNotFoundExceptionGP.hpp"
+#include <GpRpc/GpRpcCoreGP/GpRpcMethodNotFoundThrowerGP.hpp>
+#include <GpRpc/GpRpcCoreGP/GpRpcMethodNotFoundExceptionGP.hpp>
 
 namespace GPlatform {
 

@@ -1,5 +1,4 @@
-#include "GpRpcRsResultGPDesc.hpp"
-
+#include <GpRpc/GpRpcCoreGP/RqRs/GpRpcRsResultGPDesc.hpp>
 #include <GpCore2/GpReflection/GpReflectManager.hpp>
 #include <GpCore2/GpReflection/GpReflectPropUtils.hpp>
 

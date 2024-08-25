@@ -1,4 +1,4 @@
-#include "GpRpcMethod.hpp"
+#include <GpRpc/GpRpcCore/Server/GpRpcMethod.hpp>
 
 namespace GPlatform {
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "GpRpcCoreGP_global.hpp"
-#include "../GpRpcCore/Server/GpRpcMethodsManager.hpp"
+#include <GpRpc/GpRpcCoreGP/GpRpcCoreGP_global.hpp>
+#include <GpRpc/GpRpcCore/Server/GpRpcMethodsManager.hpp>
 
 namespace GPlatform {
 

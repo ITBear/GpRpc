@@ -1,4 +1,4 @@
-#include "GpRpcMethodNotFoundExceptionGP.hpp"
+#include <GpRpc/GpRpcCoreGP/GpRpcMethodNotFoundExceptionGP.hpp>
 
 namespace GPlatform {
 

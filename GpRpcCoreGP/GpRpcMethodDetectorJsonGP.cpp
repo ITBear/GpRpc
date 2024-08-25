@@ -1,5 +1,5 @@
-#include "GpRpcMethodDetectorJsonGP.hpp"
-#include "../../GpJson/GpJsonSerializerCtx.hpp"
+#include <GpRpc/GpRpcCoreGP/GpRpcMethodDetectorJsonGP.hpp>
+#include <GpJson/GpJsonSerializerCtx.hpp>
 
 namespace GPlatform {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GpRpcClientGP.hpp"
+#include <GpRpc/GpRpcCoreGP/GpRpcClientGP.hpp>
 
 namespace GPlatform {
 
@@ -24,7 +24,7 @@ private:
 };
 
 GpRpcClientSidGP::GpRpcClientSidGP (GpRpcCliTransport::SP aTransport) noexcept:
-GpRpcClientGP(std::move(aTransport))
+GpRpcClientGP{std::move(aTransport)}
 {
 }
 

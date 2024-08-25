@@ -1,4 +1,4 @@
-#include "GpRpcMethodFactory.hpp"
+#include <GpRpc/GpRpcCore/Server/GpRpcMethodFactory.hpp>
 
 namespace GPlatform {
 

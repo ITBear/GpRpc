@@ -1,19 +1,26 @@
 # ----------- Config -----------
 TEMPLATE        = lib
-#CONFIG        += staticlib
 QMAKE_CXXFLAGS += -DGP_REFLECTION_STATIC_ADD_TO_MANAGER
 QMAKE_CXXFLAGS += -DGP_MODULE_UUID=acb1415b-e079-41d4-4a3a-78cd0e8dfd31
 PACKET_NAME     = GpRpcCoreGP
 DEFINES        += GP_RPC_CORE_GP_LIBRARY
 _VER_MAJ        = 2
 _VER_MIN        = 1
-_VER_PAT        = 5
+_VER_PAT        = 6
 DIR_LEVEL       = ./../..
 
 include($$DIR_LEVEL/../QtGlobalPro.pri)
 
+release_build_static{
+	CONFIG += staticlib
+}
+
 # ----------- Libraries -----------
 os_windows{
+	LIBS += -lGpRpcCore$$TARGET_POSTFIX
+	LIBS += -lGpJson$$TARGET_POSTFIX
+	LIBS += -lGpReflection$$TARGET_POSTFIX
+	LIBS += -lGpUtils$$TARGET_POSTFIX
 }
 
 os_linux{

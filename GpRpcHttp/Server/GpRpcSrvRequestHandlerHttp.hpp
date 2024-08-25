@@ -1,9 +1,8 @@
 #pragma once
 
-#include "../GpRpcHttp_global.hpp"
-#include "../../GpRpcCore/Server/GpRpcMethodsManagersGroup.hpp"
-#include "../../GpRpcCore/Server/GpRpcMethodDetectorFactory.hpp"
-
+#include <GpRpc/GpRpcHttp/GpRpcHttp_global.hpp>
+#include <GpRpc/GpRpcCore/Server/GpRpcMethodsManagersGroup.hpp>
+#include <GpRpc/GpRpcCore/Server/GpRpcMethodDetectorFactory.hpp>
 #include <GpNetwork/GpNetworkHttp/GpNetworkHttpCore/RequestHandlers/GpHttpRequestHandler.hpp>
 #include <GpCore2/GpReflection/Serializers/GpReflectSerializerFactory.hpp>
 

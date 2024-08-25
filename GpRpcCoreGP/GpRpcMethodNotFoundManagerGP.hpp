@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GpRpcMethodsManagerGP.hpp"
+#include <GpRpc/GpRpcCoreGP/GpRpcMethodsManagerGP.hpp>
 
 namespace GPlatform {
 
@@ -11,13 +11,13 @@ public:
     CLASS_DD(GpRpcMethodNotFoundManagerGP)
 
 public:
-                                    GpRpcMethodNotFoundManagerGP    (void) noexcept;
-    virtual                         ~GpRpcMethodNotFoundManagerGP   (void) noexcept override final;
+                                GpRpcMethodNotFoundManagerGP    (void) noexcept;
+    virtual                     ~GpRpcMethodNotFoundManagerGP   (void) noexcept override final;
 
-    virtual GpRpcRsIfDesc::SP       NewDefaultRs                    (void) const override final;
+    virtual GpRpcRsIfDesc::SP   NewDefaultRs                    (void) const override final;
 
 protected:
-    virtual void                    OnInit                          (void) override final;
+    virtual void                OnInit                          (void) override final;
 };
 
 }// namespace GPlatform

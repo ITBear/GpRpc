@@ -1,4 +1,4 @@
-#include "GpRpcHttpLib.hpp"
+#include <GpRpc/GpRpcHttp/GpRpcHttpLib.hpp>
 
 namespace GPlatform {
 

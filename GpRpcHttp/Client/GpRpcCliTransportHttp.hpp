@@ -1,10 +1,9 @@
 #pragma once
 
-#include "../../GpRpcCore/Client/GpRpcCliTransport.hpp"
-
+#include <GpRpc/GpRpcCore/Client/GpRpcCliTransport.hpp>
 #include <GpCore2/GpReflection/Serializers/GpReflectSerializer.hpp>
-#include <GpNetwork/GpNetworkHttp/GpNetworkHttpCore/Client/GpHttpClient.hpp>
-#include <optional>
+#include <GpNetwork/GpNetworkCore/Sockets/GpSocketFlags.hpp>
+#include <GpNetwork/GpNetworkCore/Pollers/GpIOEventPollerCatalog.hpp>
 
 namespace GPlatform {
 
@@ -16,7 +15,10 @@ public:
 
 public:
                                 GpRpcCliTransportHttp   (GpReflectSerializer::SP    aSerializer,
-                                                         GpHttpClient::SP           aHttpClient) noexcept;
+                                                         GpSocketFlags              aSocketFlags,
+                                                         GpIOEventPollerIdx         aIOEventPollerIdx,
+                                                         milliseconds_t             aConnectTimeout,
+                                                         milliseconds_t             aRequestTimeout) noexcept;
     virtual                     ~GpRpcCliTransportHttp  (void) noexcept override final;
 
     virtual GpReflectObject::SP ProcessRQ               (const GpUrl&                                   aUrl,
@@ -29,7 +31,10 @@ public:
 
 private:
     GpReflectSerializer::SP     iSerializer;
-    GpHttpClient::SP            iHttpClient;
+    const GpSocketFlags         iSocketFlags;
+    const GpIOEventPollerIdx    iIOEventPollerIdx;
+    const milliseconds_t        iConnectTimeout;
+    const milliseconds_t        iRequestTimeout;
 };
 
 }// namespace GPlatform

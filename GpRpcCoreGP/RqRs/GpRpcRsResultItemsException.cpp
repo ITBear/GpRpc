@@ -1,4 +1,4 @@
-#include "GpRpcRsResultItemsException.hpp"
+#include <GpRpc/GpRpcCoreGP/RqRs/GpRpcRsResultItemsException.hpp>
 
 namespace GPlatform {
 

@@ -1,7 +1,6 @@
-#include "GpRpcMethodsManagerGP.hpp"
-#include "RqRs/GpRpcRsResultGPDesc.hpp"
-#include "RqRs/GpRpcRsResultItemsException.hpp"
-
+#include <GpRpc/GpRpcCoreGP/GpRpcMethodsManagerGP.hpp>
+#include <GpRpc/GpRpcCoreGP/RqRs/GpRpcRsResultGPDesc.hpp>
+#include <GpRpc/GpRpcCoreGP/RqRs/GpRpcRsResultItemsException.hpp>
 #include <GpCore2/GpUtils/Exceptions/GpExceptionCode.hpp>
 
 namespace GPlatform {

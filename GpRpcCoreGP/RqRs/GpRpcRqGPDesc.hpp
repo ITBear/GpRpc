@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../GpRpcCoreGP_global.hpp"
-#include "../../GpRpcCore/RqRs/GpRpcRqIfDesc.hpp"
-
+#include <GpRpc/GpRpcCoreGP/GpRpcCoreGP_global.hpp>
+#include <GpRpc/GpRpcCore/RqRs/GpRpcRqIfDesc.hpp>
 #include <GpCore2/GpReflection/GpReflectUtils.hpp>
 #include <GpCore2/GpUtils/TypeTraits/GpTypeInfoUtils.hpp>
 
@@ -33,16 +32,16 @@ GpRpcRqGPDesc::GpRpcRqGPDesc (void) noexcept
 }
 
 GpRpcRqGPDesc::GpRpcRqGPDesc (const GpRpcRqGPDesc& aDesc):
-GpRpcRqIfDesc(aDesc),
-method(aDesc.method),
-sid(aDesc.sid)
+GpRpcRqIfDesc{aDesc},
+method{aDesc.method},
+sid   {aDesc.sid}
 {
 }
 
 GpRpcRqGPDesc::GpRpcRqGPDesc (GpRpcRqGPDesc&& aDesc) noexcept:
-GpRpcRqIfDesc(std::move(aDesc)),
-method(std::move(aDesc.method)),
-sid(std::move(aDesc.sid))
+GpRpcRqIfDesc{std::move(aDesc)},
+method{std::move(aDesc.method)},
+sid   {std::move(aDesc.sid)}
 {
 }
 
@@ -82,19 +81,19 @@ NAME##_rq::NAME##_rq (void) noexcept \
 } \
 \
 NAME##_rq::NAME##_rq (const NAME##_rq& aRq): \
-::GPlatform::GpRpcRqGPDesc(aRq), \
-data(GpReflectUtils::SCopyValue(aRq.data)) \
+::GPlatform::GpRpcRqGPDesc{aRq}, \
+data{GpReflectUtils::SCopyValue(aRq.data)} \
 { \
 } \
  \
 NAME##_rq::NAME##_rq (NAME##_rq&& aRq) noexcept: \
-::GPlatform::GpRpcRqGPDesc(std::move(aRq)), \
-data(std::move(aRq.data)) \
+::GPlatform::GpRpcRqGPDesc{std::move(aRq)}, \
+data{std::move(aRq.data)} \
 { \
 } \
  \
 NAME##_rq::NAME##_rq (DataT&& aData) noexcept: \
-data(std::move(aData)) \
+data{std::move(aData)} \
 { \
 } \
  \
@@ -133,4 +132,4 @@ void    NAME##_rq::_SReflectCollectProps (GpReflectProp::SmallVecVal& aPropsOut)
     PROP(data); \
 }
 
-}//GPlatform
+}// namespace GPlatform

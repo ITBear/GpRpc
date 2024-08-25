@@ -1,7 +1,6 @@
 #pragma once
 
-#include "../GpRpcCore_global.hpp"
-
+#include <GpRpc/GpRpcCore/GpRpcCore_global.hpp>
 #include <GpCore2/GpUtils/Macro/GpMacroClass.hpp>
 #include <GpCore2/GpUtils/Types/Containers/GpContainersT.hpp>
 #include <GpCore2/GpUtils/Types/Containers/GpAny.hpp>
@@ -29,4 +28,4 @@ public:
     virtual void                SetPayload      (GpAny& aPayload);
 };
 
-}//GPlatform
+}// namespace GPlatform

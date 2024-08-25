@@ -1,7 +1,7 @@
 #pragma once
 
-#include "GpRpcHttp_global.hpp"
 #include <GpCore2/GpUtils/Other/GpLinkedLibsInfo.hpp>
+#include <GpRpc/GpRpcHttp/GpRpcHttp_global.hpp>
 
 namespace GPlatform {
 

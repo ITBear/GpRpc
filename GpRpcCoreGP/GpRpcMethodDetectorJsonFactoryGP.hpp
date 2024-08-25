@@ -1,11 +1,9 @@
 #pragma once
 
-#include "GpRpcCoreGP_global.hpp"
-
+#include <GpRpc/GpRpcCoreGP/GpRpcCoreGP_global.hpp>
 #include <GpCore2/GpUtils/Macro/GpMacroClass.hpp>
 #include <GpCore2/GpUtils/Types/Containers/GpContainersT.hpp>
-
-#include "../GpRpcCore/Server/GpRpcMethodDetectorFactory.hpp"
+#include <GpRpc/GpRpcCore/Server/GpRpcMethodDetectorFactory.hpp>
 
 namespace GPlatform {
 

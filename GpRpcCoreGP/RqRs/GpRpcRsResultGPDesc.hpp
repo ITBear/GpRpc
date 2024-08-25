@@ -1,7 +1,6 @@
 #pragma once
 
-#include "../GpRpcCoreGP_global.hpp"
-
+#include <GpRpc/GpRpcCoreGP/GpRpcCoreGP_global.hpp>
 #include <GpCore2/GpReflection/GpReflectObject.hpp>
 #include <GpCore2/GpReflection/GpReflectUtils.hpp>
 
@@ -32,18 +31,18 @@ public:
 };
 
 GpRpcRsResultGPDesc::GpRpcRsResultGPDesc (const GpRpcRsResultGPDesc& aDesc):
-GpReflectObject(aDesc),
-code (GpReflectUtils::SCopyValue(aDesc.code)),
-msg  (GpReflectUtils::SCopyValue(aDesc.msg)),
-items(GpReflectUtils::SCopyValue(aDesc.items))
+GpReflectObject{aDesc},
+code {GpReflectUtils::SCopyValue(aDesc.code)},
+msg  {GpReflectUtils::SCopyValue(aDesc.msg)},
+items{GpReflectUtils::SCopyValue(aDesc.items)}
 {
 }
 
 GpRpcRsResultGPDesc::GpRpcRsResultGPDesc (GpRpcRsResultGPDesc&& aDesc) noexcept:
-GpReflectObject(std::move(aDesc)),
-code (std::move(aDesc.code)),
-msg  (std::move(aDesc.msg)),
-items(std::move(aDesc.items))
+GpReflectObject{std::move(aDesc)},
+code {std::move(aDesc.code)},
+msg  {std::move(aDesc.msg)},
+items{std::move(aDesc.items)}
 {
 }
 
@@ -53,9 +52,9 @@ GpRpcRsResultGPDesc::GpRpcRsResultGPDesc
     std::string         aMsg,
     ItemT::C::Vec::SP   aItems
 ) noexcept:
-code (std::move(aCode)),
-msg  (std::move(aMsg)),
-items(std::move(aItems))
+code {std::move(aCode)},
+msg  {std::move(aMsg)},
+items{std::move(aItems)}
 {
 }
 

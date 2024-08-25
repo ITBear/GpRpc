@@ -1,8 +1,7 @@
 #pragma once
 
-#include "GpRpcCoreGP_global.hpp"
-#include "../GpRpcCore/Server/GpRpcMethodNotFoundThrower.hpp"
-
+#include <GpRpc/GpRpcCoreGP/GpRpcCoreGP_global.hpp>
+#include <GpRpc/GpRpcCore/Server/GpRpcMethodNotFoundThrower.hpp>
 #include <GpCore2/GpUtils/Macro/GpMacroClass.hpp>
 #include <GpCore2/GpUtils/Types/Containers/GpContainersT.hpp>
 
@@ -15,10 +14,10 @@ public:
     CLASS_DD(GpRpcMethodNotFoundThrowerGP)
 
 public:
-                                GpRpcMethodNotFoundThrowerGP    (void) noexcept = default;
-    virtual                     ~GpRpcMethodNotFoundThrowerGP   (void) noexcept override final = default;
+                    GpRpcMethodNotFoundThrowerGP    (void) noexcept = default;
+    virtual         ~GpRpcMethodNotFoundThrowerGP   (void) noexcept override final = default;
 
-    virtual void                Throw                           (std::string_view aMethodName) const override final;
+    virtual void    Throw                           (std::string_view aMethodName) const override final;
 };
 
 }// namespace GPlatform

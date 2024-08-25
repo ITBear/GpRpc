@@ -1,4 +1,4 @@
-#include "GpRpcMethodsManager.hpp"
+#include <GpRpc/GpRpcCore/Server/GpRpcMethodsManager.hpp>
 
 namespace GPlatform {
 

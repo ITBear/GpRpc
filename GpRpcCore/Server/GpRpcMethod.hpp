@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../RqRs/GpRpcRqIfDesc.hpp"
-#include "../RqRs/GpRpcRsIfDesc.hpp"
+#include <GpRpc/GpRpcCore/RqRs/GpRpcRqIfDesc.hpp>
+#include <GpRpc/GpRpcCore/RqRs/GpRpcRsIfDesc.hpp>
 
 namespace GPlatform {
 

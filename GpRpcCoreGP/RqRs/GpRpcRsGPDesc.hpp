@@ -1,8 +1,7 @@
 #pragma once
 
-#include "GpRpcRsResultGPDesc.hpp"
-#include "../../GpRpcCore/RqRs/GpRpcRsIfDesc.hpp"
-
+#include <GpRpc/GpRpcCoreGP/RqRs/GpRpcRsResultGPDesc.hpp>
+#include <GpRpc/GpRpcCore/RqRs/GpRpcRsIfDesc.hpp>
 #include <GpCore2/GpUtils/TypeTraits/GpTypeInfoUtils.hpp>
 
 namespace GPlatform {

@@ -1,5 +1,5 @@
-#include "GpRpcSrvRequestHandlerHttpFactory.hpp"
-#include "GpRpcSrvRequestHandlerHttp.hpp"
+#include <GpRpc/GpRpcHttp/Server/GpRpcSrvRequestHandlerHttpFactory.hpp>
+#include <GpRpc/GpRpcHttp/Server/GpRpcSrvRequestHandlerHttp.hpp>
 
 namespace GPlatform {
 
@@ -9,9 +9,9 @@ GpRpcSrvRequestHandlerHttpFactory::GpRpcSrvRequestHandlerHttpFactory
     GpReflectSerializerFactory::SP  aSerializerFactory,
     GpRpcMethodDetectorFactory::SP  aMethodDetectorFactory
 ) noexcept:
-iRpcManagersGroup     (std::move(aRpcManagersGroup)),
-iSerializerFactory    (std::move(aSerializerFactory)),
-iMethodDetectorFactory(std::move(aMethodDetectorFactory))
+iRpcManagersGroup     {std::move(aRpcManagersGroup)},
+iSerializerFactory    {std::move(aSerializerFactory)},
+iMethodDetectorFactory{std::move(aMethodDetectorFactory)}
 {
 }
 

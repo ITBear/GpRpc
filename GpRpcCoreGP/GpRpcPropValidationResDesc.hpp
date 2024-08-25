@@ -1,7 +1,6 @@
 #pragma once
 
-#include "GpRpcCoreGP_global.hpp"
-
+#include <GpRpc/GpRpcCoreGP/GpRpcCoreGP_global.hpp>
 #include <GpCore2/GpReflection/GpReflectUtils.hpp>
 #include <GpCore2/GpReflection/GpReflectObject.hpp>
 
@@ -29,18 +28,18 @@ public:
 };
 
 GpRpcPropValidationResDesc::GpRpcPropValidationResDesc (const GpRpcPropValidationResDesc& aDesc):
-GpReflectObject(aDesc),
-name    (GpReflectUtils::SCopyValue(aDesc.name)),
-error   (GpReflectUtils::SCopyValue(aDesc.error)),
-is_valid(GpReflectUtils::SCopyValue(aDesc.is_valid))
+GpReflectObject{aDesc},
+name    {GpReflectUtils::SCopyValue(aDesc.name)},
+error   {GpReflectUtils::SCopyValue(aDesc.error)},
+is_valid{GpReflectUtils::SCopyValue(aDesc.is_valid)}
 {
 }
 
 GpRpcPropValidationResDesc::GpRpcPropValidationResDesc (GpRpcPropValidationResDesc&& aDesc) noexcept:
-GpReflectObject(std::move(aDesc)),
-name    (std::move(aDesc.name)),
-error   (std::move(aDesc.error)),
-is_valid(std::move(aDesc.is_valid))
+GpReflectObject{std::move(aDesc)},
+name    {std::move(aDesc.name)},
+error   {std::move(aDesc.error)},
+is_valid{std::move(aDesc.is_valid)}
 {
 }
 
@@ -50,10 +49,10 @@ GpRpcPropValidationResDesc::GpRpcPropValidationResDesc
     std::string aError,
     const bool  aIsValid
 ) noexcept:
-name    (std::move(aName)),
-error   (std::move(aError)),
-is_valid(std::move(aIsValid))
+name    {std::move(aName)},
+error   {std::move(aError)},
+is_valid{std::move(aIsValid)}
 {
 }
 
-}//GPlatform
+}// namespace GPlatform

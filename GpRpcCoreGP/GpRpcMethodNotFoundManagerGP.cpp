@@ -1,10 +1,9 @@
-#include "GpRpcMethodNotFoundManagerGP.hpp"
+#include <GpRpc/GpRpcCoreGP/GpRpcMethodNotFoundManagerGP.hpp>
 
 #include <GpCore2/GpReflection/GpReflectManager.hpp>
 #include <GpCore2/GpUtils/Exceptions/GpException.hpp>
-
-#include "../GpRpcCore/RqRs/GpRpcVoidDesc.hpp"
-#include "RqRs/GpRpcRsGPDesc.hpp"
+#include <GpRpc/GpRpcCore/RqRs/GpRpcVoidDesc.hpp>
+#include <GpRpc/GpRpcCoreGP/RqRs/GpRpcRsGPDesc.hpp>
 
 namespace GPlatform {
 
@@ -32,3 +31,4 @@ void    GpRpcMethodNotFoundManagerGP::OnInit (void)
 }
 
 }// namespace GPlatform
+

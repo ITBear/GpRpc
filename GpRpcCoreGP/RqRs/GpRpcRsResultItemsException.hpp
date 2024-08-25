@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GpRpcRsResultGPDesc.hpp"
+#include <GpRpc/GpRpcCoreGP/RqRs/GpRpcRsResultGPDesc.hpp>
 
 namespace GPlatform {
 
@@ -26,14 +26,14 @@ public:
 };
 
 GpRpcRsResultItemsException::GpRpcRsResultItemsException (const GpRpcRsResultItemsException& aException):
-GpException(aException),
-iItems(GpReflectUtils::SCopyValue(aException.iItems))
+GpException{aException},
+iItems{GpReflectUtils::SCopyValue(aException.iItems)}
 {
 }
 
 GpRpcRsResultItemsException::GpRpcRsResultItemsException (GpRpcRsResultItemsException&& aException):
-GpException(std::move(aException)),
-iItems(std::move(aException.iItems))
+GpException{std::move(aException)},
+iItems{std::move(aException.iItems)}
 {
 }
 
@@ -42,8 +42,8 @@ GpRpcRsResultItemsException::GpRpcRsResultItemsException
     ItemT::C::Vec::SP&&     aItems,
     const SourceLocationT&  aSourceLocation
 ):
-GpException("Multiple errors", aSourceLocation),
-iItems(std::move(aItems))
+GpException{"Multiple errors", aSourceLocation},
+iItems{std::move(aItems)}
 {
 }
 

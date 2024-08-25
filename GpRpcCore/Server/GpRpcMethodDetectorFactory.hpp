@@ -1,7 +1,6 @@
 #pragma once
 
-#include "GpRpcMethodDetector.hpp"
-
+#include <GpRpc/GpRpcCore/Server/GpRpcMethodDetector.hpp>
 #include <GpCore2/GpUtils/Types/Containers/GpBytesArray.hpp>
 
 namespace GPlatform {

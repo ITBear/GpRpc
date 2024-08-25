@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GpRpcCliTransport.hpp"
+#include <GpRpc/GpRpcCore/Client/GpRpcCliTransport.hpp>
 
 namespace GPlatform {
 

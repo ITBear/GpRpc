@@ -1,10 +1,8 @@
-#include "GpRpcClientGP.hpp"
-
+#include <GpRpc/GpRpcCoreGP/GpRpcClientGP.hpp>
 #include <GpCore2/GpReflection/GpReflectManager.hpp>
 #include <GpCore2/GpUtils/Exceptions/GpExceptionCode.hpp>
 #include <GpCore2/GpUtils/Exceptions/GpExceptionTextCode.hpp>
-
-#include "RqRs/GpRpcRsResultGPDesc.hpp"
+#include <GpRpc/GpRpcCoreGP/RqRs/GpRpcRsResultGPDesc.hpp>
 
 namespace GPlatform {
 

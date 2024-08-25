@@ -1,17 +1,23 @@
-#include "GpRpcCliTransportHttp.hpp"
-
+#include <GpRpc/GpRpcHttp/Client/GpRpcCliTransportHttp.hpp>
 #include <GpCore2/GpUtils/Streams/GpByteWriterStorageByteArray.hpp>
 #include <GpNetwork/GpNetworkHttp/GpNetworkHttpCore/Body/GpHttpBodyPayloadFixed.hpp>
+#include <GpNetwork/GpNetworkHttp/GpNetworkHttpCore/Client/GpHttpClient.hpp>
 
 namespace GPlatform {
 
 GpRpcCliTransportHttp::GpRpcCliTransportHttp
 (
-    GpReflectSerializer::SP aSerializer,
-    GpHttpClient::SP        aHttpClient
+    GpReflectSerializer::SP     aSerializer,
+    const GpSocketFlags         aSocketFlags,
+    const GpIOEventPollerIdx    aIOEventPollerIdx,
+    const milliseconds_t        aConnectTimeout,
+    const milliseconds_t        aRequestTimeout
 ) noexcept:
-iSerializer{std::move(aSerializer)},
-iHttpClient{std::move(aHttpClient)}
+iSerializer      {std::move(aSerializer)},
+iSocketFlags     {aSocketFlags},
+iIOEventPollerIdx{aIOEventPollerIdx},
+iConnectTimeout  {aConnectTimeout},
+iRequestTimeout  {aRequestTimeout}
 {
 }
 
@@ -33,12 +39,12 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
     const GpReflectSerializer& serializer = iSerializer.V();
 
     // RQ/RS
-    GpHttpResponse::SP httpRs;
+    GpHttpResponse::SP httpRsSP;
 
     {
         // Serialize RQ to body
         GpBytesArray body;
-        if (aRq.has_value())
+        if (aRq.has_value()) [[likely]]
         {
             const GpReflectObject& rqDesc = aRq.value().get();
 
@@ -68,13 +74,15 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
         }
 
         // Prepate HTTP RQ
+        GpHttpClient        httpClient{iSocketFlags, iIOEventPollerIdx};// TODO: reimplement with connection pool
         GpHttpHeaders       rqHeaders;
-        GpHttpRequest::SP   httpRq = MakeSP<GpHttpRequest>
+
+        GpHttpRequest::SP   httpRqSP = MakeSP<GpHttpRequest>
         (
             GpHttpRequestNoBodyDesc
             {
                 GpHttpVersion::HTTP_1_1,
-                GpHttpRequestType::POST,
+                GpHttpRequestType::HTTP_POST,
                 aUrl,
                 rqHeaders
             },
@@ -83,22 +91,45 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
 
         if (aBeforeProcessFn.has_value())
         {
-            auto rq = GpAny{GpHttpRequest::SP(httpRq)};
+            auto rq = GpAny{httpRqSP};
             aBeforeProcessFn.value()(rq);
         }
 
         // Do HTTP RQ
-        httpRs = iHttpClient.V().DoRqAndWaitForRs(httpRq, GpHttpClient::ErorrMode::THROW_ON_NOT_200);
+        httpRsSP = httpClient.DoAndWait
+        (
+            httpRqSP,
+            iConnectTimeout,
+            iRequestTimeout
+        );
+
+        const GpHttpResponse& httpRs = httpRsSP.V();
+
+        // Check http RS result
+        THROW_COND_HTTP
+        (
+            httpRs.iResponseNoBody.code == GpHttpResponseCode::OK_200,
+            httpRs.iResponseNoBody.code,
+            httpRs.iBody.IsNotNULL() ? static_cast<const GpHttpBodyPayloadFixed&>(httpRs.iBody.Vn()).Data().AsStringView() : ""_sv
+        );
+
+        // Check http RS body
+        THROW_COND_GP
+        (
+            httpRs.iBody.IsNotNULL(),
+            "HTTP RS body is empty"
+        );
     }
 
     if (aAfterProcessFn.has_value())
     {
-        auto rs = GpAny{GpHttpResponse::SP(httpRs)};
+        auto rs = GpAny{httpRsSP};
         aAfterProcessFn.value()(rs);
     }
 
     // Deserialize RS
-    const GpHttpBodyPayload& rsBodyPayload = httpRs.V().iBody.V();
+    const GpHttpBodyPayload& rsBodyPayload = httpRsSP.V().iBody.Vn();
+
     THROW_COND_GP
     (
         rsBodyPayload.Type() == GpHttpBodyPayloadType::FIXED_SIZE,

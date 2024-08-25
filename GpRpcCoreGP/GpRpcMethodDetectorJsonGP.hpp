@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../GpRpcCore/Server/GpRpcMethodDetector.hpp"
-
 #include <GpCore2/GpUtils/Types/Containers/GpBytesArray.hpp>
+#include <GpRpc/GpRpcCore/Server/GpRpcMethodDetector.hpp>
 
 namespace GPlatform {
 
@@ -23,7 +22,7 @@ private:
 };
 
 GpRpcMethodDetectorJsonGP::GpRpcMethodDetectorJsonGP (GpSpanCharRW aJsonStr) noexcept:
-iJsonStr(std::move(aJsonStr))
+iJsonStr{std::move(aJsonStr)}
 {
 }
 
