@@ -5,6 +5,6 @@
 
 namespace GPlatform {
 
-GP_DECLARE_LIB(GP_RPC_HTTP_API, GpRpcHttpLib)
+GP_DECLARE_LIB_REGISTRATOR(GpRpcHttpLib)
 
 }// namespace GPlatform

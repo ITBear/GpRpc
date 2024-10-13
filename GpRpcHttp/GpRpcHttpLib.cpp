@@ -2,6 +2,6 @@
 
 namespace GPlatform {
 
-GP_IMPLEMENT_LIB(GpRpcHttpLib)
+GP_IMPLEMENT_LIB_REGISTRATOR(GpRpcHttpLib)
 
 }// namespace GPlatform

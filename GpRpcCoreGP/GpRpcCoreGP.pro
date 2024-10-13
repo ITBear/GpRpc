@@ -11,19 +11,25 @@ DIR_LEVEL       = ./../..
 
 include($$DIR_LEVEL/../QtGlobalPro.pri)
 
-release_build_static{
+equals(var_link, "static") {
 	CONFIG += staticlib
 }
 
 # ----------- Libraries -----------
-os_windows{
+equals(var_os, "windows") {
 	LIBS += -lGpRpcCore$$TARGET_POSTFIX
 	LIBS += -lGpJson$$TARGET_POSTFIX
 	LIBS += -lGpReflection$$TARGET_POSTFIX
 	LIBS += -lGpUtils$$TARGET_POSTFIX
 }
 
-os_linux{
+equals(var_os, "linux") {
+	LIBS += -lGpRpcCore$$TARGET_POSTFIX
+	LIBS += -lGpJson$$TARGET_POSTFIX
+	LIBS += -lGpReflection$$TARGET_POSTFIX
+	LIBS += -lGpUtils$$TARGET_POSTFIX
+
+	LIBS += -lfmt
 }
 
 # ----------- Sources and headers -----------

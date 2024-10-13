@@ -1,7 +1,7 @@
-#include "GpRpcCoreLib.hpp"
+#include <GpRpc/GpRpcCore/GpRpcCoreLib.hpp>
 
 namespace GPlatform {
 
-GP_IMPLEMENT_LIB(GpRpcCoreLib)
+GP_IMPLEMENT_LIB_REGISTRATOR(GpRpcCoreLib)
 
 }// namespace GPlatform
