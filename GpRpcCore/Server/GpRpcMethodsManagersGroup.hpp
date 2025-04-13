@@ -15,7 +15,7 @@ public:
 
     using ManagerAndMethodT         = std::tuple<GpRpcMethodsManager::SP, GpRpcMethod::SP>;
     using ManagerAndMethodFactoryT  = std::tuple<GpRpcMethodsManager::SP, GpRpcMethodFactory::SP>;
-    using ApiManagersT              = GpDictionary<boost::container::flat_map<std::string/*method name*/, ManagerAndMethodFactoryT, std::less<>>>;
+    using ApiManagersT              = GpSharedMap<boost::container::flat_map<std::string/*method name*/, ManagerAndMethodFactoryT, std::less<>>>;
 
 public:
                                     GpRpcMethodsManagersGroup       (GpRpcMethodsManager::SP        aApiMethodNotFoundManager,

@@ -19,16 +19,16 @@ void    GpRpcMethodsManager::Register (GpRpcMethodFactory::SP aFactory)
 {
     const auto&         factory     = aFactory.V();
     std::string_view    name        = factory.MethodName();
-    const bool          isInserted  = std::get<1>(iFactories.TrySet(factory.MethodName(), aFactory));
+    const auto[_, state]            = iFactories.FindOrSet(factory.MethodName(), aFactory);
 
-    THROW_COND_GP
+    VERIFY
     (
-        isInserted == true,
+        state == GpContainerUpdateStatus::INSERT_NEW,
         [name]()
         {
             return fmt::format
             (
-                "Method name {} is not unique",
+                "The method name '{}' is not unique",
                 name
             );
         }

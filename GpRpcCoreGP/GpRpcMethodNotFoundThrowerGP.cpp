@@ -5,7 +5,7 @@ namespace GPlatform {
 
 void    GpRpcMethodNotFoundThrowerGP::Throw (std::string_view aMethodName) const
 {
-    THROW_METHOD_NOT_FOUND_GP
+    THROW
     (
         GpRpcMethodNotFoundExceptionCodeGP::METHOD_NOT_FOUND,
         aMethodName

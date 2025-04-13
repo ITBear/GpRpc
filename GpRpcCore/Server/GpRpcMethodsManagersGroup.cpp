@@ -20,13 +20,13 @@ void    GpRpcMethodsManagersGroup::Register (GpRpcMethodsManager::SP aApiMethods
 {
     aApiMethodsManager->Init();
 
-    aApiMethodsManager->Factories().ProcessContainer
+    aApiMethodsManager->Factories().Process
     (
         [&](auto& aElements)
         {
             for (auto&[methodName, methodFactory]: aElements)
             {
-                iApiManagers.SetOrUpdate
+                iApiManagers.Set
                 (
                     methodName,
                     std::tuple<GpRpcMethodsManager::SP, GpRpcMethodFactory::SP>
@@ -44,7 +44,7 @@ void    GpRpcMethodsManagersGroup::RegisterEmptyMethodNameManager (GpRpcMethodsM
 {
     aApiMethodsManager.V().Init();
 
-    aApiMethodsManager.V().Factories().ProcessContainer
+    aApiMethodsManager.V().Factories().Process
     (
         [&](auto& aElements)
         {
@@ -66,7 +66,7 @@ GpRpcMethodsManagersGroup::ManagerAndMethodT    GpRpcMethodsManagersGroup::Find 
 {
     if (!aMethodName.empty())
     {
-        auto managerAndMethodFactoryOpt = iApiManagers.GetOpt(aMethodName);
+        auto managerAndMethodFactoryOpt = iApiManagers.FindOpt(aMethodName);
 
         if (!managerAndMethodFactoryOpt.has_value()) [[unlikely]]
         {

@@ -22,7 +22,7 @@ GpHttpResponse::SP  GpRpcSrvRequestHandlerHttp::OnRequest (GpHttpRequest& aReque
     {
         GpHttpBodyPayload& rqBodyPayload = aRequest.iBody.V();
 
-        THROW_COND_HTTP
+        VERIFY
         (
             rqBodyPayload.Type() == GpHttpBodyPayloadType::FIXED_SIZE,
             GpHttpResponseCode::BAD_REQUEST_400,
@@ -32,7 +32,7 @@ GpHttpResponse::SP  GpRpcSrvRequestHandlerHttp::OnRequest (GpHttpRequest& aReque
         GpHttpBodyPayloadFixed& rqBodyPayloadFixed  = static_cast<GpHttpBodyPayloadFixed&>(rqBodyPayload);
         GpSpanByteRW            rqBodyPayloadData   = rqBodyPayloadFixed.Data();
 
-        THROW_COND_HTTP
+        VERIFY
         (
             !rqBodyPayloadData.Empty(),
             GpHttpResponseCode::BAD_REQUEST_400,

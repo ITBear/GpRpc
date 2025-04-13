@@ -4,7 +4,7 @@
 #include <GpCore2/GpUtils/Macro/GpMacroClass.hpp>
 #include <GpCore2/GpUtils/Types/Strings/GpStringOps.hpp>
 #include <GpCore2/GpUtils/Types/Containers/GpContainersT.hpp>
-#include <GpCore2/GpUtils/Types/Containers/GpDictionary.hpp>
+#include <GpCore2/GpUtils/Types/Containers/GpSharedMap.hpp>
 #include <GpRpc/GpRpcCore/Server/GpRpcMethodFactory.hpp>
 
 namespace GPlatform {
@@ -17,7 +17,7 @@ public:
 
     TAG_SET(THREAD_SAFE)
 
-    using MethodFactoriesT = GpDictionary<boost::container::flat_map<std::string, GpRpcMethodFactory::SP, std::less<>>>;
+    using MethodFactoriesT = GpSharedMap<boost::container::flat_map<std::string, GpRpcMethodFactory::SP, std::less<>>>;
 
 protected:
                                 GpRpcMethodsManager     (void) noexcept;

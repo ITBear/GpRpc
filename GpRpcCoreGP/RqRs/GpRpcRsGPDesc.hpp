@@ -116,7 +116,7 @@ void    NAME##_rs::SetPayload (GpAny& aPayload) \
         data = aPayload.ValueNoCheck<DataTRefC>(); \
     } else \
     { \
-        THROW_GP("Unsupported payload type"); \
+        THROW("Unsupported payload type"); \
     } \
 } \
  \

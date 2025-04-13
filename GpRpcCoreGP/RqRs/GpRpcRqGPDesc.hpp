@@ -123,7 +123,7 @@ void    NAME##_rq::SetPayload (GpAny& aAny) \
         data = aAny.ValueNoCheck<DataTRefC>(); \
    } else \
    { \
-        THROW_GP("Unsupported payload type"); \
+        THROW("Unsupported payload type"); \
    } \
 } \
  \

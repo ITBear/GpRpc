@@ -34,11 +34,11 @@ public:
                                                              std::optional<ProcessRqRsFnT>  aAfterProcessFn);
 
     inline GpReflectObject::SP      ProcessRQ               (const GpUrl&                                   aUrl,
-                                                             std::optional<GpReflectObject::C::Ref::CVal>   aRq,
+                                                             std::optional<GpReflectObject::C::Refs::CVal>  aRq,
                                                              const std::vector<const GpReflectModel*>&      aRsTypeStructVariants);
 
     virtual GpReflectObject::SP     ProcessRQ               (const GpUrl&                                   aUrl,
-                                                             std::optional<GpReflectObject::C::Ref::CVal>   aRq,
+                                                             std::optional<GpReflectObject::C::Refs::CVal>  aRq,
                                                              const std::vector<const GpReflectModel*>&      aRsTypeStructVariants,
                                                              std::optional<SerializeRqFnT>                  aBeforeSerializeRqFn,
                                                              std::optional<SerializeRqFnT>                  aAfterSerializeRqFn,
@@ -69,7 +69,7 @@ void    GpRpcCliTransport::SetDefaultProcessFns
 GpReflectObject::SP GpRpcCliTransport::ProcessRQ
 (
     const GpUrl&                                    aUrl,
-    std::optional<GpReflectObject::C::Ref::CVal>    aRq,
+    std::optional<GpReflectObject::C::Refs::CVal>   aRq,
     const std::vector<const GpReflectModel*>&       aRsTypeStructVariants
 )
 {

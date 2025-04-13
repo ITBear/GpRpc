@@ -21,7 +21,7 @@ void    GpRpcClientGP::CheckRsResult
 
     const auto& res = GpReflectManager::S().CastRef<const GPlatform::GpRpcRsResultGPDesc>(resCSP.V());
 
-    THROW_COND_TEXT_CODE_GP
+    VERIFY
     (
         res.code == "OK",
         [aMethodName, &res]()

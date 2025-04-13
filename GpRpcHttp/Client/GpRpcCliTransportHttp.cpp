@@ -28,7 +28,7 @@ GpRpcCliTransportHttp::~GpRpcCliTransportHttp (void) noexcept
 GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
 (
     const GpUrl&                                    aUrl,
-    std::optional<GpReflectObject::C::Ref::CVal>    aRq,
+    std::optional<GpReflectObject::C::Refs::CVal>   aRq,
     const std::vector<const GpReflectModel*>&       aRsTypeStructVariants,
     std::optional<SerializeRqFnT>                   aBeforeSerializeRqFn,
     std::optional<SerializeRqFnT>                   aAfterSerializeRqFn,
@@ -106,7 +106,7 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
         const GpHttpResponse& httpRs = httpRsSP.V();
 
         // Check http RS result
-        THROW_COND_HTTP
+        VERIFY
         (
             httpRs.iResponseNoBody.code == GpHttpResponseCode::OK_200,
             httpRs.iResponseNoBody.code,
@@ -114,7 +114,7 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
         );
 
         // Check http RS body
-        THROW_COND_GP
+        VERIFY
         (
             httpRs.iBody.IsNotNULL(),
             "HTTP RS body is empty"
@@ -130,7 +130,7 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
     // Deserialize RS
     const GpHttpBodyPayload& rsBodyPayload = httpRsSP.V().iBody.Vn();
 
-    THROW_COND_GP
+    VERIFY
     (
         rsBodyPayload.Type() == GpHttpBodyPayloadType::FIXED_SIZE,
         "Only GpHttpBodyPayloadType::FIXED_SIZE supported"
