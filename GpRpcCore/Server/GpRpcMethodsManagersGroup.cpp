@@ -72,8 +72,8 @@ GpRpcMethodsManagersGroup::ManagerAndMethodT    GpRpcMethodsManagersGroup::Find 
         {
             return
             {
-                GpRpcMethodsManager::SP::SNull(),
-                GpRpcMethod::SP::SNull()
+                nullptr,
+                nullptr
             };
         }
 

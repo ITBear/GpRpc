@@ -39,11 +39,11 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
     const GpReflectSerializer& serializer = iSerializer.V();
 
     // RQ/RS
-    GpHttpResponse::SP httpRsSP;
+    GpHttpResponse::UP httpRsUP;
 
     {
         // Serialize RQ to body
-        GpBytesArray body;
+        GpByteArray body;
         if (aRq.has_value()) [[likely]]
         {
             const GpReflectObject& rqDesc = aRq.value().get();
@@ -77,7 +77,7 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
         GpHttpClient        httpClient{iSocketFlags, iIOEventPollerIdx};// TODO: reimplement with connection pool
         GpHttpHeaders       rqHeaders;
 
-        GpHttpRequest::SP   httpRqSP = MakeSP<GpHttpRequest>
+        GpHttpRequest::UP   httpRqUP = std::make_unique<GpHttpRequest>
         (
             GpHttpRequestNoBodyDesc
             {
@@ -91,19 +91,19 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
 
         if (aBeforeProcessFn.has_value())
         {
-            auto rq = GpAny{httpRqSP};
+            auto rq = GpAny{std::reference_wrapper<GpHttpRequest>{*httpRqUP}};
             aBeforeProcessFn.value()(rq);
         }
 
         // Do HTTP RQ
-        httpRsSP = httpClient.DoAndWait
+        httpRsUP = httpClient.DoAndWait
         (
-            httpRqSP,
+            std::move(httpRqUP),
             iConnectTimeout,
             iRequestTimeout
         );
 
-        const GpHttpResponse& httpRs = httpRsSP.V();
+        const GpHttpResponse& httpRs = *httpRsUP;
 
         // Check http RS result
         VERIFY
@@ -123,12 +123,12 @@ GpReflectObject::SP GpRpcCliTransportHttp::ProcessRQ
 
     if (aAfterProcessFn.has_value())
     {
-        auto rs = GpAny{httpRsSP};
+        auto rs = GpAny{std::reference_wrapper<GpHttpResponse>{*httpRsUP}};
         aAfterProcessFn.value()(rs);
     }
 
     // Deserialize RS
-    const GpHttpBodyPayload& rsBodyPayload = httpRsSP.V().iBody.Vn();
+    const GpHttpBodyPayload& rsBodyPayload = httpRsUP->iBody.Vn();
 
     VERIFY
     (

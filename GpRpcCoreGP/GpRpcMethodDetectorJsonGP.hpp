@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GpCore2/GpUtils/Types/Containers/GpBytesArray.hpp>
+#include <GpCore2/GpUtils/Types/Containers/GpByteArray.hpp>
 #include <GpRpc/GpRpcCore/Server/GpRpcMethodDetector.hpp>
 
 namespace GPlatform {

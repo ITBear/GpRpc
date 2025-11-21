@@ -39,7 +39,7 @@ GpHttpResponse::SP  GpRpcSrvRequestHandlerHttp::OnRequest (GpHttpRequest& aReque
             "Empty body"
         );
 
-        GpBytesArray nullTerminatedData;
+        GpByteArray nullTerminatedData;
         if (rqBodyPayloadData[rqBodyPayloadData.Count() - 1] != std::byte{0})
         {
             // String must be null terminated
@@ -62,7 +62,7 @@ GpHttpResponse::SP  GpRpcSrvRequestHandlerHttp::OnRequest (GpHttpRequest& aReque
             apiMethodsManager   = managerSP;
 
             // Deserialize RQ data
-            rq = serializer.Vn().ToObject(rqBodyCtx.V(), method.RqReflectModel().Vn()).CastAs<GpRpcRqIfDesc::SP>();
+            rq = serializer.Vn().ToObject(rqBodyCtx.V(), method.RqReflectModel().Vn()).CastTo<GpRpcRqIfDesc::SP>();
 
             // Call method
             GpReflectObject::SP result = apiMethodsManager.V().CallAndCatch
@@ -75,7 +75,7 @@ GpHttpResponse::SP  GpRpcSrvRequestHandlerHttp::OnRequest (GpHttpRequest& aReque
 
             if (rs.IsNULL())
             {
-                rs = method.RsReflectModel().Vn().NewInstance().CastAs<GpRpcRsIfDesc::SP>();
+                rs = method.RsReflectModel().Vn().NewInstance().CastTo<GpRpcRsIfDesc::SP>();
             }
 
             rs.V().SetResult(result);
@@ -115,7 +115,7 @@ GpHttpResponse::SP  GpRpcSrvRequestHandlerHttp::OnRequest (GpHttpRequest& aReque
     }
 
     // Serialize RS data
-    GpBytesArray rsBody = serializer.Vn().FromObject(rs.V());
+    GpByteArray rsBody = serializer.Vn().FromObject(rs.V());
 
     // TODO: move to config
     GpHttpHeaders headers;

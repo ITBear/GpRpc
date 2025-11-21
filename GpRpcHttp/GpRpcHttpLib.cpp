@@ -1,7 +1,10 @@
 #include <GpRpc/GpRpcHttp/GpRpcHttpLib.hpp>
+#include <GpCore2/GpUtils/Other/GpLinkedLibsInfo.hpp>
 
-namespace GPlatform {
+GP_STATIC_INITIALIZER_IMPL(GpRpcHttp)
+GP_LIB_REGISTRATOR(GpRpcHttpLib)
 
-GP_IMPLEMENT_LIB_REGISTRATOR(GpRpcHttpLib)
-
-}// namespace GPlatform
+void    GpRpcHttp_StaticInitializer::OnInitialize (void)
+{
+    GpRpcHttpLib::SRegisterSelf();
+}

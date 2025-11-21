@@ -1,7 +1,10 @@
 #include <GpRpc/GpRpcCoreGP/GpRpcCoreGPLib.hpp>
+#include <GpCore2/GpUtils/Other/GpLinkedLibsInfo.hpp>
 
-namespace GPlatform {
+GP_STATIC_INITIALIZER_IMPL(GpRpcCoreGP)
+GP_LIB_REGISTRATOR(GpRpcCoreGPLib)
 
-GP_IMPLEMENT_LIB_REGISTRATOR(GpRpcCoreGPLib)
-
-}// namespace GPlatform
+void    GpRpcCoreGP_StaticInitializer::OnInitialize (void)
+{
+    GpRpcCoreGPLib::SRegisterSelf();
+}

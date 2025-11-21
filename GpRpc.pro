@@ -20,7 +20,7 @@ os_linux {
 		./GpRpcCore \
 		./GpRpcCoreGP \
 		./GpRpcHttp
-} else:os_macx {
+} else:os_macos {
 	SUBDIRS += \
 		./GpRpcCore \
 		./GpRpcCoreGP \

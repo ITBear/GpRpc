@@ -1,10 +1,6 @@
 #pragma once
 
 #include <GpRpc/GpRpcCoreGP/GpRpcCoreGP_global.hpp>
-#include <GpCore2/GpUtils/Other/GpLinkedLibsInfo.hpp>
+#include <GpCore2/GpUtils/Other/GpStaticInitializer.hpp>
 
-namespace GPlatform {
-
-GP_DECLARE_LIB_REGISTRATOR(GpRpcCoreGPLib)
-
-}// namespace GPlatform
+GP_STATIC_INITIALIZER(GP_RPC_CORE_GP_API, GpRpcCoreGP)
